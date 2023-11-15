@@ -2,7 +2,8 @@
   <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/AutoReconnect-Remastered.png">
 </div>
 
-A plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. This Plugin allowe players who was accidently disconnected from server to spawn what the player was before disconnect.
+
+AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. This Plugin allowe players who was accidently disconnected from server to spawn what the player was before disconnect.
 
 # How to install
 
