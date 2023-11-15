@@ -9,13 +9,13 @@ AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled
 
 Make sure you've installed the newest version of [Exiled](https://github.com/Exiled-Team/EXILED).
 
-1.Download newest version from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases)
+1. Download newest version from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases)
 
-2.Put `.DLL` file at `%AppData%\EXILED\Plugins`. (Press Win + R and input the `%AppData%\EXILED\Plugins` for directly open the Plugins folder.)
+2. Put `.DLL` file at `%AppData%\EXILED\Plugins`. (Press Win + R and input the `%AppData%\EXILED\Plugins` for directly open the Plugins folder.)
 
-3.Start the server.
+3. Start the server.
 
-4.Enjoy.
+4. Enjoy.
 
 
 # Features
@@ -26,10 +26,18 @@ The player will have same HP, same Inventory, same Ammo and etc.
 
 Full Auto plugin. No need do anything else than install.
 
+```
+Restore player's Role.
+Restore player's HP.
+Restore player's Ammo.
+Restore player's Inventory.
+```
+
 
 # TODO
 
 ```
+Config file.
 Restore effect with effect level and time.
 Remove player's previous ragdoll.
 ```
