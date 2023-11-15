@@ -17,9 +17,12 @@ namespace AutoReconnectRemastered
         public override Version RequiredExiledVersion { get; } = new(8, 3, 9);
         
         public EventHandlers? EventHandlers { get; private set; }
+        
         public PlayerHandlers? PlayerHandlers { get; private set; }
         
         public PlayerData? PlayerData { get; private set; }
+        
+        public EffectData? EffectData { get; private set; }
         
         public AmmoData? AmmoData { get; private set; }
         
@@ -35,6 +38,7 @@ namespace AutoReconnectRemastered
                 {
                     AmmoData = new AmmoData(this);
                     EventHandlers = new EventHandlers(this);
+                    EffectData = new EffectData(this);
                     PlayerHandlers = new PlayerHandlers(this);
                     PlayerData = new PlayerData(this);
                     Timer = new Timer(this);
@@ -46,6 +50,7 @@ namespace AutoReconnectRemastered
                 {
                     AmmoData = null;
                     EventHandlers = null;
+                    EffectData = null;
                     PlayerHandlers = null;
                     PlayerData = null;
                     Timer = null;

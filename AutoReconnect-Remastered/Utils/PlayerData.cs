@@ -32,6 +32,8 @@ namespace AutoReconnectRemastered
                     Ammo = new Dictionary<ItemType, ushort>(),
                     Ammo_Clone = new Dictionary<ItemType, ushort>(),
                     Class = player.Role.Type,
+                    Effects = player.ActiveEffects,
+                    Effects_Repertory = new Dictionary<EffectType, (byte, float)>(),
                     Health = player.Health,
                     Inventory = player.Items,
                     Inventory_Clone = new List<Item>(),
@@ -45,6 +47,7 @@ namespace AutoReconnectRemastered
                 
                 CloneInventory(player);
                 AutoReconnect.Instance.AmmoData.StoreAmmo(player);
+                AutoReconnect.Instance.EffectData.StoreEffects(player);
             }
         }
         
@@ -129,6 +132,8 @@ namespace AutoReconnectRemastered
                     Log.Info("Player's Inventory has been successfully restored.");
                     
                     AutoReconnect.Instance.AmmoData.RestoreAmmo(player);
+
+                    AutoReconnect.Instance.EffectData.RestoreEffects(player);
                     
                     
                     foreach (var itemToRemove in itemsToRemove)

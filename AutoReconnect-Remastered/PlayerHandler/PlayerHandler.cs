@@ -35,5 +35,9 @@ namespace AutoReconnectRemastered
         public Dictionary<ItemType, ushort> Ammo { get; set; }
         
         public Dictionary<ItemType, ushort> Ammo_Clone { get; set; }
+        
+        public IEnumerable<StatusEffectBase> Effects { get; set; }
+        
+        public Dictionary<EffectType, (byte, float)> Effects_Repertory  { get; set; }
     }
 }
