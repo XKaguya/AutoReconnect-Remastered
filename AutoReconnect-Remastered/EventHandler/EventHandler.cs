@@ -29,6 +29,7 @@ namespace AutoReconnectRemastered
                 player.ClearInventory();
                 DisconnectedPlayers.Add(player.UserId, player);
                 Log.Info($"Player {player.Nickname} has joined the list.");
+                AutoReconnect.Instance.RagdollRemove.GetLastRagdollAndRemove(player);
             }
         }
 
@@ -60,14 +61,7 @@ namespace AutoReconnectRemastered
             {
                 AutoReconnect.Instance.PlayerData.ResurrectPlayer(player, playerData);
                 Log.Info($"Player {player.Nickname}'s data has been restored.");
-                if (player.Role.Side == Side.Scp)
-                {
-                    player.Broadcast(5, "你已重连，你会以数据存储时的状态重生。", Broadcast.BroadcastFlags.Normal, true);
-                }
-                else
-                {
-                    player.Broadcast(5, "你已重连，你会以数据存储时的状态重生。\n请记得低头捡起你的物品。", Broadcast.BroadcastFlags.Normal, true);
-                }
+                player.Broadcast(5, "你已重连，你会以数据存储时的状态重生。", Broadcast.BroadcastFlags.Normal, true);
             }
         }
 
