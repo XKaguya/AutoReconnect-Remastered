@@ -31,6 +31,7 @@ Restore player's Role.
 Restore player's HP.
 Restore player's Ammo.
 Restore player's Inventory.
+Restore player's Effect with Intensity and Duration.
 ```
 
 
@@ -38,7 +39,6 @@ Restore player's Inventory.
 
 ```
 Config file.
-Restore effect with effect level and time.
 Remove player's previous ragdoll.
 ```
 
