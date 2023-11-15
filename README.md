@@ -1,5 +1,4 @@
-# AutoReconnect-Remastered
-<div align="center">
+div align="center">
   <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/AutoReconnect-Remastered.png">
 </div>
 
