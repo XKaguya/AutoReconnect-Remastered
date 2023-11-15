@@ -25,3 +25,11 @@ The player will have same HP, same Inventory, same Ammo and etc.
 
 Full Auto plugin. No need do anything else than install.
 
+
+# TODO
+
+```
+Restore effect with effect level and time.
+Remove player's previous ragdoll.
+```
+
