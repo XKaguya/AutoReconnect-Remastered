@@ -38,3 +38,18 @@ Restore player's Inventory.
 Restore player's Effect with Intensity and Duration.
 ```
 
+# Configuration
+
+```
+# Whether or not to restore player's active effect. Player will respawn with same effect strengh and remain time.
+recovery_effect: true
+# Whether or not to restore player's inventory. Player will respawn with same inventory.
+recovery_inventory: true
+# Whether or not to restore player's ammo. Player will respawn with same ammo.
+recovery_ammo: true
+# Whether or not to spawn disconnected player's ragdoll.
+spawn_ragdoll: true
+# Language (en_US, zh_CN)
+language: 'zh_CN'
+```
+
