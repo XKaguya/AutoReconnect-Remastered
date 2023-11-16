@@ -11,6 +11,8 @@ Use it at private server if you want to use it and don't mind.
 
 Feature about asking player with DNT if player is accept for storing their data were working In Progress.
 
+After that the plugin will not break VSR and can be used at any place.
+
 # How to install
 
 Make sure you've installed the newest version of [Exiled](https://github.com/Exiled-Team/EXILED).
