@@ -76,7 +76,6 @@ namespace AutoReconnectRemastered
             {
                 Log.Info($"Entering Method: ResurrectPlayer. Target player: {player.Nickname}, ID: {player.UserId}");
                 player.Role.Set(playerData.Class, RoleSpawnFlags.None);
-                Log.Info("Role Section:");
                 Log.Info($"Player's Role is now {playerData.Class}.");
                 player.Position = new UnityEngine.Vector3(playerData.Position_X, playerData.Position_Y, playerData.Position_Z);
                 Log.Info($"Player's pos is now {playerData.Position_X}, {playerData.Position_Y}, {playerData.Position_Z}.");
