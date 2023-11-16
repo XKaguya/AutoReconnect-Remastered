@@ -38,6 +38,7 @@ Restore player's Effect with Intensity and Duration.
 # TODO
 
 ```
+Restore custom role.
 Config file.
 Remove player's previous ragdoll.
 ```
