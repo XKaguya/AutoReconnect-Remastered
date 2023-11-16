@@ -4,6 +4,8 @@ using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.CustomRoles.API.Features;
+using PlayerRoles;
 
 namespace AutoReconnectRemastered
 {
@@ -26,7 +28,6 @@ namespace AutoReconnectRemastered
                     float Duration = effectBase.Duration;
                 
                     PlayerData.Effects_Repertory[Effect] = (Intensity, Duration);
-                    Log.Info($"Effect {Effect} stored in dictionary with {Intensity} and {Duration}");
                 }
             }
             catch (Exception e)
@@ -43,22 +44,25 @@ namespace AutoReconnectRemastered
 
             try
             {
-                foreach (EffectType effectType in PlayerData.Effects_Repertory.Keys)
+                if (PlayerData.Effects_Repertory.Count != 0)
                 {
-                    byte intensity;
-                    float duration;
-
-                    if (PlayerData.Effects_Repertory.TryGetValue(effectType, out var tuple))
+                    foreach (EffectType effectType in PlayerData.Effects_Repertory.Keys)
                     {
-                        intensity = tuple.Item1;
-                        duration = tuple.Item2;
+                        byte intensity;
+                        float duration;
 
-                        player.EnableEffect(effectType, intensity, duration);
-                        Log.Info($"Effect {effectType} applied with {intensity} and {duration}");
-                    }
-                    else
-                    {
-                        continue;
+                        if (PlayerData.Effects_Repertory.TryGetValue(effectType, out var tuple))
+                        {
+                            intensity = tuple.Item1;
+                            duration = tuple.Item2;
+                        
+
+                            player.EnableEffect(effectType, intensity, duration);
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                 }
             }

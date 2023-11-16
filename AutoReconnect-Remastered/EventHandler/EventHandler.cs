@@ -10,6 +10,7 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.Ragdolls;
 
 namespace AutoReconnectRemastered
 {
@@ -24,12 +25,21 @@ namespace AutoReconnectRemastered
         public void OnDisconnected(LeftEventArgs ev)
         {
             Player player = ev.Player;
+            
             if (player.Role.Type != RoleTypeId.Spectator && player.Role.Type != RoleTypeId.None)
             {
-                player.ClearInventory();
-                DisconnectedPlayers.Add(player.UserId, player);
-                Log.Info($"Player {player.Nickname} has joined the list.");
-                AutoReconnect.Instance.RagdollRemove.GetLastRagdollAndRemove(player);
+                try
+                {
+                    player.ClearInventory();
+                    DisconnectedPlayers.Add(player.UserId, player);
+                    Log.Info($"Player {player.Nickname} has joined the list.");
+                }
+                catch (Exception e)
+                {
+                    var text = $"Event OnDisconnected raising error. Reason: {e}";
+                    Log.Error(text);
+                    throw;
+                }
             }
         }
 
@@ -60,7 +70,6 @@ namespace AutoReconnectRemastered
             if (playerData != null)
             {
                 AutoReconnect.Instance.PlayerData.ResurrectPlayer(player, playerData);
-                Log.Info($"Player {player.Nickname}'s data has been restored.");
                 player.Broadcast(5, "你已重连，你会以数据存储时的状态重生。", Broadcast.BroadcastFlags.Normal, true);
             }
         }
@@ -75,6 +84,26 @@ namespace AutoReconnectRemastered
         public void OnRoundstarted()
         {
             AutoReconnect.Instance.Timer.RunTimer();
+        }
+
+        private bool isAllowed = false;
+
+        public void OnSpawningRagdolls(SpawningRagdollEventArgs ev)
+        {
+            Player player = ev.Player;
+            var disconnectedPlayers = AutoReconnect.Instance.EventHandlers.DisconnectedPlayers;
+            RagdollData Info = ev.Info;
+
+            if (disconnectedPlayers.ContainsKey(player.UserId))
+            {
+                ev.IsAllowed = isAllowed;
+                Log.Info($"Spawn ragdoll event rejected.");
+            }
+            else
+            {
+                isAllowed = true;
+                ev.IsAllowed = isAllowed;
+            }
         }
     }
 }

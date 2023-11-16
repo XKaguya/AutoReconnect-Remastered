@@ -3,6 +3,7 @@ using System;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using PlayerRoles.Ragdolls;
 
 namespace AutoReconnectRemastered
 {
@@ -21,6 +22,8 @@ namespace AutoReconnectRemastered
         public PlayerHandlers? PlayerHandlers { get; private set; }
         
         public PlayerData? PlayerData { get; private set; }
+        
+        public InventoryData? InventoryData { get; private set; }
         
         public EffectData? EffectData { get; private set; }
         
@@ -41,6 +44,7 @@ namespace AutoReconnectRemastered
                     EffectData = new EffectData(this);
                     PlayerHandlers = new PlayerHandlers(this);
                     PlayerData = new PlayerData(this);
+                    InventoryData = new InventoryData(this);
                     Timer = new Timer(this);
                     TestStuff = new TestStuff(this);
                     
@@ -53,6 +57,7 @@ namespace AutoReconnectRemastered
                     EffectData = null;
                     PlayerHandlers = null;
                     PlayerData = null;
+                    InventoryData = null;
                     Timer = null;
                     TestStuff = null;
                     
@@ -78,6 +83,8 @@ namespace AutoReconnectRemastered
                     Exiled.Events.Handlers.Player.Left += EventHandlers.OnDisconnected;
                     Exiled.Events.Handlers.Server.RoundStarted += EventHandlers.OnRoundstarted;
                     Exiled.Events.Handlers.Player.Dying += EventHandlers.OnDying;
+
+                    Exiled.Events.Handlers.Player.SpawningRagdoll += EventHandlers.OnSpawningRagdolls;
                     
                     Log.Info("Event subscribe successful.");
                 }
@@ -88,6 +95,8 @@ namespace AutoReconnectRemastered
                     Exiled.Events.Handlers.Player.Left -= EventHandlers.OnDisconnected;
                     Exiled.Events.Handlers.Server.RoundStarted -= EventHandlers.OnRoundstarted;
                     Exiled.Events.Handlers.Player.Dying -= EventHandlers.OnDying;
+                    
+                    Exiled.Events.Handlers.Player.SpawningRagdoll -= EventHandlers.OnSpawningRagdolls;
                     
                     Log.Info("Event unsubscribe successful.");
                 }

@@ -1,17 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CustomPlayerEffects;
-using Discord;
 using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using InventorySystem.Items.Autosync;
-using InventorySystem.Items.ThrowableProjectiles;
-using InventorySystem.Items.Usables;
 using PlayerRoles;
-using MEC;
 
 namespace AutoReconnectRemastered
 {
@@ -45,7 +37,7 @@ namespace AutoReconnectRemastered
                 };
                 Players[player.UserId] = Player;
                 
-                CloneInventory(player);
+                AutoReconnect.Instance.InventoryData.CloneInventory(player);
                 AutoReconnect.Instance.AmmoData.StoreAmmo(player);
                 AutoReconnect.Instance.EffectData.StoreEffects(player);
             }
@@ -54,25 +46,6 @@ namespace AutoReconnectRemastered
         public void ClearPlayerData()
         {
             Players.Clear();
-        }
-
-        public void CloneInventory(Player player)
-        {
-            PlayerHandlers playerData = GetPlayerData(player);
-            try
-            {
-                foreach (Item item in playerData.Inventory)
-                {
-                    Item clonedItem = item.Clone();
-                    playerData.Inventory_Clone.Add(clonedItem);
-                }
-            }
-            catch (Exception e)
-            {
-                var text = $"Clone failed. Reason: {e}";
-                Log.Error(text);
-                throw;
-            }
         }
 
         public PlayerHandlers GetPlayerData(Player player)
@@ -101,53 +74,29 @@ namespace AutoReconnectRemastered
         {
             if (player != null && playerData != null)
             {
-                Log.Info("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 Log.Info($"Entering Method: ResurrectPlayer. Target player: {player.Nickname}, ID: {player.UserId}");
-                
                 player.Role.Set(playerData.Class, RoleSpawnFlags.None);
+                Log.Info("Role Section:");
                 Log.Info($"Player's Role is now {playerData.Class}.");
                 player.Position = new UnityEngine.Vector3(playerData.Position_X, playerData.Position_Y, playerData.Position_Z);
                 Log.Info($"Player's pos is now {playerData.Position_X}, {playerData.Position_Y}, {playerData.Position_Z}.");
                 player.Health = playerData.Health;
                 Log.Info($"Player's health is now {playerData.Health}.");
-
-                if (playerData.Inventory_Clone.Count == 0)
-                {
-                    Log.Info("playerData.Inventory_Clone is empty.");
-                }
-                try
-                {
-                    Log.Info($"Trying restoring player's inventory...");
-                    
-                    var itemsToRemove = new List<Item>();
-                    foreach (Item item in playerData.Inventory_Clone)
-                    {
-                        item.ChangeItemOwner(playerData.Player, player);
-                        Log.Info($"Changed Item {item.Type} owner from previous into new.");
-                        item.Give(player);
-                        Log.Info($"Item {item.Type} has been successfully given to {player.Nickname}.");
-                        itemsToRemove.Add(item);
-                    }
-                    
-                    Log.Info("Player's Inventory has been successfully restored.");
-                    
-                    AutoReconnect.Instance.AmmoData.RestoreAmmo(player);
-
-                    AutoReconnect.Instance.EffectData.RestoreEffects(player);
-                    
-                    
-                    foreach (var itemToRemove in itemsToRemove)
-                    {
-                        playerData.Inventory_Clone.Remove(itemToRemove);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                    throw;
-                }
                 
-                Log.Info("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                if (AutoReconnect.Instance.Config.RecoveryAmmo)
+                {
+                    AutoReconnect.Instance.AmmoData.RestoreAmmo(player);
+                }
+
+                if (AutoReconnect.Instance.Config.RecoveryInventory)
+                {
+                    AutoReconnect.Instance.InventoryData.RestoreInventory(player);
+                }
+
+                if (AutoReconnect.Instance.Config.RecoveryEffect)
+                {
+                    AutoReconnect.Instance.EffectData.RestoreEffects(player);
+                }
             }
         }
         

@@ -4,6 +4,7 @@ using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.CustomRoles.API.Features;
 using PlayerRoles;
 
 namespace AutoReconnectRemastered
