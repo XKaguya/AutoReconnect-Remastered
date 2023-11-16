@@ -9,6 +9,8 @@ AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled
 
 Make sure you've installed the newest version of [Exiled](https://github.com/Exiled-Team/EXILED).
 
+Before Exiled merged this [Pull Request](https://github.com/Exiled-Team/EXILED/pull/2249), you should use the modified version of Exiled.(You may add the public method by yourself and use your own complied `Exiled.API.dll` too.)
+
 1. Download newest version from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases)
 
 2. Put `.DLL` file at `%AppData%\EXILED\Plugins`. (Press Win + R and input the `%AppData%\EXILED\Plugins` for directly open the Plugins folder.)
