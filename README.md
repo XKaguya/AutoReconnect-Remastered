@@ -11,13 +11,15 @@ Make sure you've installed the newest version of [Exiled](https://github.com/Exi
 
 Before Exiled merged this [Pull Request](https://github.com/Exiled-Team/EXILED/pull/2249), you should use the modified version of Exiled.(You may add the public method by yourself and use your own complied `Exiled.API.dll` too.)
 
-1. Download newest version from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases)
+1. Download newest version of `AutoReconnect-Remastered.dll` and `Exiled.API.dll` from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases)
 
-2. Put `.DLL` file at `%AppData%\EXILED\Plugins`. (Press Win + R and input the `%AppData%\EXILED\Plugins` for directly open the Plugins folder.)
+2. Put `AutoReconnect-Remastered.dll` file at `%AppData%\EXILED\Plugins`. (Press Win + R and input the `%AppData%\EXILED\Plugins` for directly open the Plugins folder.)
 
-3. Start the server.
+3. Put `Exiled.API.dll` at `%AppData%\SCP Secret Laboratory\PluginAPI\plugins\global\dependencies`. (Same as above.)
 
-4. Enjoy.
+4. Start the server.
+
+5. Enjoy.
 
 
 # Features
