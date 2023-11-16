@@ -14,8 +14,8 @@ namespace AutoReconnectRemastered
         public override string Author => "RedLeaves";
         public override string Name => "AutoReconnect-Remastered";
 
-        public override Version Version { get; } = new(1, 0, 0);
-        public override Version RequiredExiledVersion { get; } = new(8, 3, 9);
+        public override Version Version { get; } = new(1, 0, 1);
+        public override Version RequiredExiledVersion { get; } = new(8, 4, 0);
         
         public EventHandlers? EventHandlers { get; private set; }
         
