@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-      <TargetFramework>net48</TargetFramework>
+      <TargetFramework>net481</TargetFramework>
       <AssemblyName>AutoReconnect-Remastered</AssemblyName>
 
       <Authors>Build</Authors>
@@ -21,69 +21,368 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\.editorconfig" Link=".editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="0Harmony">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
+        <HintPath>..\..\EXILED\0Harmony.dll</HintPath>
       </Reference>
       <Reference Include="Assembly-CSharp-firstpass">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+        <HintPath>..\..\EXILED\Assembly-CSharp-firstpass(3).dll</HintPath>
       </Reference>
       <Reference Include="Assembly-CSharp">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp.dll</HintPath>
+        <HintPath>..\..\EXILED\Assembly-CSharp-Publicized (3).dll</HintPath>
+      </Reference>
+      <Reference Include="BouncyCastle.Cryptography">
+        <HintPath>..\..\EXILED\BouncyCastle.Cryptography.dll</HintPath>
+      </Reference>
+      <Reference Include="Caress">
+        <HintPath>..\..\EXILED\Caress.dll</HintPath>
       </Reference>
       <Reference Include="CommandSystem.Core">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
+        <HintPath>..\..\EXILED\CommandSystem.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="DnsClient">
+        <HintPath>..\..\EXILED\DnsClient.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.API">
-        <HintPath>D:\SLUtils\Modified-Exiled\Exiled.API.dll</HintPath>
+        <HintPath>..\..\EXILED\Exiled.API (3).dll</HintPath>
       </Reference>
       <Reference Include="Exiled.CreditTags">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
-      </Reference>
-      <Reference Include="Exiled.CustomItems">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\Exiled.CustomItems.dll</HintPath>
-      </Reference>
-      <Reference Include="Exiled.CustomRoles">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\Exiled.CustomRoles.dll</HintPath>
+        <HintPath>..\..\EXILED\Exiled.CreditTags (3).dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Events">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\Exiled.Events.dll</HintPath>
+        <HintPath>..\..\EXILED\Exiled.Events (3).dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Loader">
-        <HintPath>D:\SigmaWarhead-uwu\SCP Secret Laboratory\PluginAPI\plugins\global\Exiled.Loader.dll</HintPath>
+        <HintPath>..\..\EXILED\Exiled.Loader (3).dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Permissions">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
+        <HintPath>..\..\EXILED\Exiled.Permissions (3).dll</HintPath>
       </Reference>
-      <Reference Include="Exiled.Updater">
-        <HintPath>D:\SigmaWarhead-uwu\EXILED\Plugins\Exiled.Updater.dll</HintPath>
+      <Reference Include="Facepunch.Steamworks.Posix">
+        <HintPath>..\..\EXILED\Facepunch.Steamworks.Posix.dll</HintPath>
+      </Reference>
+      <Reference Include="Facepunch.Steamworks.Win64">
+        <HintPath>..\..\EXILED\Facepunch.Steamworks.Win64.dll</HintPath>
       </Reference>
       <Reference Include="Mirror">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
+        <HintPath>..\..\EXILED\Mirror.dll</HintPath>
+      </Reference>
+      <Reference Include="Mirror.Components">
+        <HintPath>..\..\EXILED\Mirror.Components.dll</HintPath>
       </Reference>
       <Reference Include="Mono.Posix">
-        <HintPath>D:\SigmaWarhead-uwu\SigmaWarhead\bin\x64\Release\Mono.Posix.dll</HintPath>
+        <HintPath>..\..\EXILED\Mono.Posix.dll</HintPath>
+      </Reference>
+      <Reference Include="Mono.Security">
+        <HintPath>..\..\EXILED\Mono.Security.dll</HintPath>
+      </Reference>
+      <Reference Include="netstandard">
+        <HintPath>..\..\EXILED\netstandard.dll</HintPath>
+      </Reference>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>..\..\EXILED\Newtonsoft.Json.dll</HintPath>
       </Reference>
       <Reference Include="NorthwoodLib">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
+        <HintPath>..\..\EXILED\NorthwoodLib.dll</HintPath>
       </Reference>
       <Reference Include="PluginAPI">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\PluginAPI.dll</HintPath>
+        <HintPath>..\..\EXILED\PluginAPI.dll</HintPath>
+      </Reference>
+      <Reference Include="Pooling">
+        <HintPath>..\..\EXILED\Pooling.dll</HintPath>
+      </Reference>
+      <Reference Include="SemanticVersioning">
+        <HintPath>..\..\EXILED\SemanticVersioning.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Buffers">
+        <HintPath>..\..\EXILED\System.Buffers.dll</HintPath>
+      </Reference>
+      <Reference Include="System.ComponentModel.Composition">
+        <HintPath>..\..\EXILED\System.ComponentModel.Composition.dll</HintPath>
       </Reference>
       <Reference Include="System.ComponentModel.DataAnnotations">
         <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\System.ComponentModel.DataAnnotations.dll</HintPath>
       </Reference>
+      <Reference Include="System.Configuration">
+        <HintPath>..\..\EXILED\System.Configuration.dll</HintPath>
+      </Reference>
+      <Reference Include="System.EnterpriseServices">
+        <HintPath>..\..\EXILED\System.EnterpriseServices.dll</HintPath>
+      </Reference>
+      <Reference Include="System.IO.Compression" />
+      <Reference Include="System.Net.Http" />
+      <Reference Include="System.Runtime" />
+      <Reference Include="System.Runtime.CompilerServices.Unsafe">
+        <HintPath>..\..\EXILED\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Security">
+        <HintPath>..\..\EXILED\System.Security.dll</HintPath>
+      </Reference>
+      <Reference Include="System.ServiceModel.Internals">
+        <HintPath>..\..\EXILED\System.ServiceModel.Internals.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Transactions">
+        <HintPath>..\..\EXILED\System.Transactions.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Burst">
+        <HintPath>..\..\EXILED\Unity.Burst.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Burst.Unsafe">
+        <HintPath>..\..\EXILED\Unity.Burst.Unsafe.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Mathematics">
+        <HintPath>..\..\EXILED\Unity.Mathematics.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.ProBuilder">
+        <HintPath>..\..\EXILED\Unity.ProBuilder.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.ProBuilder.Csg">
+        <HintPath>..\..\EXILED\Unity.ProBuilder.Csg.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.ProBuilder.KdTree">
+        <HintPath>..\..\EXILED\Unity.ProBuilder.KdTree.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.ProBuilder.Poly2Tri">
+        <HintPath>..\..\EXILED\Unity.ProBuilder.Poly2Tri.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.ProBuilder.Stl">
+        <HintPath>..\..\EXILED\Unity.ProBuilder.Stl.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipelines.Core.Runtime">
+        <HintPath>..\..\EXILED\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+        <HintPath>..\..\EXILED\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipelines.HighDefinition.Config.Runtime">
+        <HintPath>..\..\EXILED\Unity.RenderPipelines.HighDefinition.Config.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime">
+        <HintPath>..\..\EXILED\Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+        <HintPath>..\..\EXILED\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.TextMeshPro">
+        <HintPath>..\..\EXILED\Unity.TextMeshPro.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Timeline">
+        <HintPath>..\..\EXILED\Unity.Timeline.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.VisualEffectGraph.Runtime">
+        <HintPath>..\..\EXILED\Unity.VisualEffectGraph.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>..\..\EXILED\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AccessibilityModule">
+        <HintPath>..\..\EXILED\UnityEngine.AccessibilityModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AIModule">
+        <HintPath>..\..\EXILED\UnityEngine.AIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AndroidJNIModule">
+        <HintPath>..\..\EXILED\UnityEngine.AndroidJNIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AnimationModule">
+        <HintPath>..\..\EXILED\UnityEngine.AnimationModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ARModule">
+        <HintPath>..\..\EXILED\UnityEngine.ARModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AssetBundleModule">
+        <HintPath>..\..\EXILED\UnityEngine.AssetBundleModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AudioModule">
+        <HintPath>..\..\EXILED\UnityEngine.AudioModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClothModule">
+        <HintPath>..\..\EXILED\UnityEngine.ClothModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterInputModule">
+        <HintPath>..\..\EXILED\UnityEngine.ClusterInputModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterRendererModule">
+        <HintPath>..\..\EXILED\UnityEngine.ClusterRendererModule.dll</HintPath>
+      </Reference>
       <Reference Include="UnityEngine.CoreModule">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+        <HintPath>..\..\EXILED\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CrashReportingModule">
+        <HintPath>..\..\EXILED\UnityEngine.CrashReportingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.DirectorModule">
+        <HintPath>..\..\EXILED\UnityEngine.DirectorModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.DSPGraphModule">
+        <HintPath>..\..\EXILED\UnityEngine.DSPGraphModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GameCenterModule">
+        <HintPath>..\..\EXILED\UnityEngine.GameCenterModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GIModule">
+        <HintPath>..\..\EXILED\UnityEngine.GIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GridModule">
+        <HintPath>..\..\EXILED\UnityEngine.GridModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.HotReloadModule">
+        <HintPath>..\..\EXILED\UnityEngine.HotReloadModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>..\..\EXILED\UnityEngine.ImageConversionModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.IMGUIModule">
+        <HintPath>..\..\EXILED\UnityEngine.IMGUIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.InputLegacyModule">
+        <HintPath>..\..\EXILED\UnityEngine.InputLegacyModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.InputModule">
+        <HintPath>..\..\EXILED\UnityEngine.InputModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.JSONSerializeModule">
+        <HintPath>..\..\EXILED\UnityEngine.JSONSerializeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.LocalizationModule">
+        <HintPath>..\..\EXILED\UnityEngine.LocalizationModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.NVIDIAModule">
+        <HintPath>..\..\EXILED\UnityEngine.NVIDIAModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ParticleSystemModule">
+        <HintPath>..\..\EXILED\UnityEngine.ParticleSystemModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PerformanceReportingModule">
+        <HintPath>..\..\EXILED\UnityEngine.PerformanceReportingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.Physics2DModule">
+        <HintPath>..\..\EXILED\UnityEngine.Physics2DModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.PhysicsModule">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+        <HintPath>..\..\EXILED\UnityEngine.PhysicsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ProfilerModule">
+        <HintPath>..\..\EXILED\UnityEngine.ProfilerModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
+        <HintPath>..\..\EXILED\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ScreenCaptureModule">
+        <HintPath>..\..\EXILED\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SharedInternalsModule">
+        <HintPath>..\..\EXILED\UnityEngine.SharedInternalsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteMaskModule">
+        <HintPath>..\..\EXILED\UnityEngine.SpriteMaskModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteShapeModule">
+        <HintPath>..\..\EXILED\UnityEngine.SpriteShapeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.StreamingModule">
+        <HintPath>..\..\EXILED\UnityEngine.StreamingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SubstanceModule">
+        <HintPath>..\..\EXILED\UnityEngine.SubstanceModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SubsystemsModule">
+        <HintPath>..\..\EXILED\UnityEngine.SubsystemsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainModule">
+        <HintPath>..\..\EXILED\UnityEngine.TerrainModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainPhysicsModule">
+        <HintPath>..\..\EXILED\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextCoreFontEngineModule">
+        <HintPath>..\..\EXILED\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextCoreTextEngineModule">
+        <HintPath>..\..\EXILED\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextRenderingModule">
+        <HintPath>..\..\EXILED\UnityEngine.TextRenderingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TilemapModule">
+        <HintPath>..\..\EXILED\UnityEngine.TilemapModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TLSModule">
+        <HintPath>..\..\EXILED\UnityEngine.TLSModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>..\..\EXILED\UnityEngine.UI.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIElementsModule">
+        <HintPath>..\..\EXILED\UnityEngine.UIElementsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIElementsNativeModule">
+        <HintPath>..\..\EXILED\UnityEngine.UIElementsNativeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIModule">
+        <HintPath>..\..\EXILED\UnityEngine.UIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UmbraModule">
+        <HintPath>..\..\EXILED\UnityEngine.UmbraModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UNETModule">
+        <HintPath>..\..\EXILED\UnityEngine.UNETModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityAnalyticsCommonModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityAnalyticsCommonModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityAnalyticsModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityConnectModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityConnectModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityCurlModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityCurlModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityTestProtocolModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+        <HintPath>..\..\EXILED\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VehiclesModule">
+        <HintPath>..\..\EXILED\UnityEngine.VehiclesModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VFXModule">
+        <HintPath>..\..\EXILED\UnityEngine.VFXModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VideoModule">
+        <HintPath>..\..\EXILED\UnityEngine.VideoModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VirtualTexturingModule">
+        <HintPath>..\..\EXILED\UnityEngine.VirtualTexturingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VRModule">
+        <HintPath>..\..\EXILED\UnityEngine.VRModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.WindModule">
+        <HintPath>..\..\EXILED\UnityEngine.WindModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.XRModule">
+        <HintPath>..\..\EXILED\UnityEngine.XRModule.dll</HintPath>
       </Reference>
       <Reference Include="YamlDotNet">
-        <HintPath>E:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\YamlDotNet.dll</HintPath>
+        <HintPath>..\..\EXILED\YamlDotNet.dll</HintPath>
+      </Reference>
+      <Reference Include="zxing">
+        <HintPath>..\..\EXILED\zxing.dll</HintPath>
       </Reference>
     </ItemGroup>
 
