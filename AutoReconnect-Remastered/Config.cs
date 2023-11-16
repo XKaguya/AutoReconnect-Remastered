@@ -27,5 +27,8 @@ namespace AutoReconnectRemastered
         
         [Description("Whether or not to spawn disconnected player's ragdoll.")]
         public bool SpawnRagdoll { get; set; } = true;
+        
+        [Description("Language (en_US, zh_CN)")]
+        public string Language { get; set; } = "zh_CN";
     }
 }
