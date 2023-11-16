@@ -5,6 +5,12 @@
 #
 AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. This Plugin allow players who was accidently disconnected from server to spawn what the player was before disconnected.
 
+# THIS PLUGIN VIOLATES NORTHWOOD VSR SO FAR.
+
+Use it at private server if you want to use it and don't mind.
+
+Feature about asking player with DNT if player is accept for storing their data were working In Progress.
+
 # How to install
 
 Make sure you've installed the newest version of [Exiled](https://github.com/Exiled-Team/EXILED).
