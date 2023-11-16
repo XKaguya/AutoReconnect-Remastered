@@ -24,5 +24,8 @@ namespace AutoReconnectRemastered
         
         [Description("Whether or not to restore player's ammo. Player will respawn with same ammo.")]
         public bool RecoveryAmmo { get; set; } = true;
+        
+        [Description("Whether or not to spawn disconnected player's ragdoll.")]
+        public bool SpawnRagdoll { get; set; } = true;
     }
 }

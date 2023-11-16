@@ -94,15 +94,18 @@ namespace AutoReconnectRemastered
             var disconnectedPlayers = AutoReconnect.Instance.EventHandlers.DisconnectedPlayers;
             RagdollData Info = ev.Info;
 
-            if (disconnectedPlayers.ContainsKey(player.UserId))
+            if (AutoReconnect.Instance.Config.SpawnRagdoll)
             {
-                ev.IsAllowed = isAllowed;
-                Log.Info($"Spawn ragdoll event rejected.");
-            }
-            else
-            {
-                isAllowed = true;
-                ev.IsAllowed = isAllowed;
+                if (disconnectedPlayers.ContainsKey(player.UserId))
+                {
+                    ev.IsAllowed = isAllowed;
+                    Log.Info($"Spawn ragdoll event rejected.");
+                }
+                else
+                {
+                    isAllowed = true;
+                    ev.IsAllowed = isAllowed;
+                }
             }
         }
     }
