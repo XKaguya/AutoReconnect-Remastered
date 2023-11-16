@@ -70,7 +70,16 @@ namespace AutoReconnectRemastered
             if (playerData != null)
             {
                 AutoReconnect.Instance.PlayerData.ResurrectPlayer(player, playerData);
-                player.Broadcast(5, "你已重连，你会以数据存储时的状态重生。", Broadcast.BroadcastFlags.Normal, true);
+                {
+                    if (AutoReconnect.Instance.Config.Language == "zh_CN")
+                    {
+                        player.Broadcast(5, "你已重连，你会以数据存储时的状态重生。", Broadcast.BroadcastFlags.Normal, true);
+                    }
+                    else
+                    {
+                        player.Broadcast(5, "You have been reconnected. You will be respawn to stored status.", Broadcast.BroadcastFlags.Normal, true);
+                    }
+                }
             }
         }
 
