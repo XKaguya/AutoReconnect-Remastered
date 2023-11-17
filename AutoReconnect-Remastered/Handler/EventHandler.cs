@@ -71,7 +71,7 @@ public class EventHandlers
             if (ev.Player.ReferenceHub.authManager.DoNotTrack)
             {
                 Log.Info($"Player {ev.Player.Nickname} has DNT on.");
-                var text = "Plugin requires your auth for storing data. Do you want to accept that ?\nIf accepted you're able to enjoy reconnect respawn features.\nType .accept in console for accept.And .deny for deny.";
+                var text = AutoReconnect.Instance.Config.DNT_Hint;
                 ev.Player.Broadcast(60, text, Broadcast.BroadcastFlags.Normal);
             }
         }
