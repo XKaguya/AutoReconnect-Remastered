@@ -18,7 +18,6 @@ namespace AutoReconnectRemastered
         {
             Instance = this;
             EventHandler = new EventHandlers();
-            EventHandlers.OnInitAcceptPlayers();
         
             base.OnEnabled();
         }
@@ -27,6 +26,7 @@ namespace AutoReconnectRemastered
         {
             Instance = null;
             EventHandler = null;
+            
             base.OnDisabled();
         }
 
@@ -34,7 +34,6 @@ namespace AutoReconnectRemastered
         {
             Instance = this;
             EventHandler = new EventHandlers();
-            EventHandlers.OnInitAcceptPlayers();
         
             base.OnReloaded();
         }

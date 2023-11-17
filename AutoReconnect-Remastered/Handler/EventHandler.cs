@@ -12,89 +12,102 @@ using Player = Exiled.API.Features.Player;
 namespace AutoReconnectRemastered
 {
     public class EventHandlers
-{
-    public static Dictionary<string, Player> DisconnectedPlayers = new();
-    
-    public static List<string> AcceptPlayers = new();
-    public EventHandlers()
     {
-        Exiled.Events.Handlers.Player.Verified += OnVerified;
-        Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
-        Exiled.Events.Handlers.Player.Left += OnLeft;
-        Exiled.Events.Handlers.Player.Dying += OnDying;
-        Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-        if (!AutoReconnect.Instance.Config.SpawnRagdoll) return;
+        public static List<string> AcceptPlayers = new();
 
-        Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdolls;
-    }
-    ~EventHandlers()
-    {
-        Exiled.Events.Handlers.Player.Left -= OnLeft;
-        Exiled.Events.Handlers.Player.Dying -= OnDying;
-        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
-        Exiled.Events.Handlers.Player.Verified -= OnVerified;
-        Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
-        Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
-    }
-    public void OnWaitingForPlayers() => ARRAPI.ClearPlayerData();
-
-    public static void OnInitAcceptPlayers()
-    {
-        var AllPlayers = Player.List.ToList();
-        foreach (var player in AllPlayers)
+        public EventHandlers()
         {
-            if (!player.ReferenceHub.authManager.DoNotTrack)
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
+            Exiled.Events.Handlers.Player.Left += OnLeft;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundstarted;
+            if (!AutoReconnect.Instance.Config.SpawnRagdoll) return;
+
+            Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdolls;
+        }
+
+        ~EventHandlers()
+        {
+            Exiled.Events.Handlers.Player.Left -= OnLeft;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundstarted;
+            if (!AutoReconnect.Instance.Config.SpawnRagdoll) return;
+
+            Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
+        }
+
+        public void OnWaitingForPlayers() => ARRAPI.ClearPlayerData();
+
+        public static void InitAcceptPlayers()
+        {
+            var AllPlayers = Player.List.ToList();
+            foreach (var player in AllPlayers)
             {
-                AcceptPlayers.Add(player.UserId);
+                if (!player.ReferenceHub.authManager.DoNotTrack)
+                {
+                    AcceptPlayers.Add(player.UserId);
+                }
             }
         }
-    }
 
-    public void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
-    public void OnLeft(LeftEventArgs ev)
-    {
-        if (AcceptPlayers.Contains(ev.Player.UserId))
+        public void OnSpawningRagdolls(SpawningRagdollEventArgs ev) =>
+            ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
+
+        public void OnRoundstarted()
         {
-            if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
+            InitAcceptPlayers();
+        }
+
+        public void OnLeft(LeftEventArgs ev)
+        {
+            if (AcceptPlayers.Contains(ev.Player.UserId))
             {
-                ARRAPI.AddPlayer(ev.Player);
-                DisconnectedPlayers.Add(ev.Player.UserId, ev.Player);
-                Log.Info($"Player {ev.Player.Nickname} data stored.");
+                if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
+                {
+                    ARRAPI.AddPlayer(ev.Player);
+                    Log.Info($"Player {ev.Player.Nickname} data stored.");
+                }
             }
         }
-    }
 
-    public void OnSpawned(SpawnedEventArgs ev)
-    {
-        if (!AcceptPlayers.Contains(ev.Player.UserId))
+        public void OnSpawned(SpawnedEventArgs ev)
         {
-            if (ev.Player.ReferenceHub.authManager.DoNotTrack)
+            if (!AcceptPlayers.Contains(ev.Player.UserId))
             {
-                Log.Info($"Player {ev.Player.Nickname} has DNT on.");
-                ev.Player.Broadcast(AutoReconnect.Instance.Config.JoinedBroadcast);
+                if (ev.Player.ReferenceHub.authManager.DoNotTrack)
+                {
+                    Log.Info($"Player {ev.Player.Nickname} has DNT on.");
+                    ev.Player.Broadcast(AutoReconnect.Instance.Config.JoinedBroadcast);
+                }
             }
         }
-    }
-    
-    public void OnDying(DyingEventArgs ev)
-    {
-        if (ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
-            ARRAPI.RemovePlayerData(ev.Player);
-        else
+
+        public void OnDying(DyingEventArgs ev)
         {
-            if (ev.Attacker == null) return;
-            ARRAPI.RemovePlayerData(ev.Player);
+            if (ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow ||
+                ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
+                ARRAPI.RemovePlayerData(ev.Player);
+            else
+            {
+                if (ev.Attacker == null) return;
+                ARRAPI.RemovePlayerData(ev.Player);
+            }
+        }
+
+        public void OnVerified(VerifiedEventArgs ev)
+        {
+            PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
+            if (playerData == null) return;
+
+            if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                ev.Player.Broadcast(5, AutoReconnect.Instance.Config.ReconnectText, Broadcast.BroadcastFlags.Normal,
+                    true);
+            ARRAPI.DisconnectedPlayers.Remove(ev.Player.UserId);
         }
     }
-    public void OnVerified(VerifiedEventArgs ev)
-    {
-        DisconnectedPlayers.Remove(ev.Player.UserId);
-        PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
-        if (playerData == null) return;
-
-        if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
-            ev.Player.Broadcast(5, AutoReconnect.Instance.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
-        ARRAPI.Players.Remove(ev.Player.UserId);
-    }
-}
 }

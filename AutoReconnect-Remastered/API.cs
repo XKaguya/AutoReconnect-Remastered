@@ -13,8 +13,8 @@ using CommandSystem;
 namespace API
 {
     public static class API
-{
-    private static HashSet<ItemType> ammoTypes = new()
+    {
+        private static HashSet<ItemType> ammoTypes = new()
         {
             ItemType.Ammo9x19,
             ItemType.Ammo556x45,
@@ -22,13 +22,13 @@ namespace API
             ItemType.Ammo762x39,
             ItemType.Ammo44cal
         };
-    
-    public static Dictionary<string, PlayerData> Players = new();
-    public static void AddPlayer(Player player)
-    {
-        if (player != null && player.IsAlive)
+
+        public static Dictionary<string, PlayerData> DisconnectedPlayers = new();
+        public static void AddPlayer(Player player)
         {
-            PlayerData Player = new PlayerData(player)
+            if (player == null && !player.IsAlive) return;
+
+            PlayerData PlayerHandler = new PlayerData(player)
             {
                 Ammo = new Dictionary<ItemType, ushort>(),
                 Class = player.Role.Type,
@@ -40,138 +40,100 @@ namespace API
                 Effects = new(),
                 Player = player,
             };
-            Players[player.UserId] = Player;
-                
+            DisconnectedPlayers.Add(player.UserId, PlayerHandler);
             CloneInventory(player);
             StoreAmmo(player);
             StoreEffects(player);
         }
-    }
 
-    public static void ClearPlayerData() => Players.Clear();
+        public static void ClearPlayerData() => DisconnectedPlayers.Clear();
 
-    public static PlayerData GetPlayerData(Player player)
-    {
-        if (Players.ContainsKey(player.UserId))
+        public static PlayerData GetPlayerData(Player player) => DisconnectedPlayers.ContainsKey(player.UserId) ? DisconnectedPlayers[player.UserId] : null;
+
+        public static void RemovePlayerData(Player player)
         {
-            return Players[player.UserId];
+            if (player == null && !DisconnectedPlayers.ContainsKey(player.UserId)) return;
+            DisconnectedPlayers.Remove(player.UserId);
         }
-        return null;
-    }
 
-    public static void RemovePlayerData(Player player)
-    {
-        if (player == null && !Players.ContainsKey(player.UserId)) return;
-        Players.Remove(player.UserId);
-    }
-
-    public static bool ResurrectPlayer(Player player, PlayerData playerData)
-    {
-        if (player == null && playerData == null) return false;
-
-        player.Role.Set(playerData.Class, RoleSpawnFlags.None);
-        player.Position = playerData.Position;
-        player.Health = playerData.Health;
-
-        if (AutoReconnect.Instance.Config.RecoveryAmmo) RestoreAmmo(player);
-        if (AutoReconnect.Instance.Config.RecoveryInventory) RestoreInventory(player);
-        if (AutoReconnect.Instance.Config.RecoveryEffect) RestoreEffects(player);
-        Players.Remove(player.UserId);
-        return true;
-    }
-    public static void CloneInventory(Player player)
-    {
-        PlayerData PlayerData = GetPlayerData(player);
-        if (PlayerData == null) return;
-
-        foreach (Item item in PlayerData.Inventory)
-            PlayerData.Inventory_Clone.Add(item.Clone());
-    }
-    public static void RestoreInventory(Player player)
-    {
-        PlayerData PlayerData = GetPlayerData(player);
-        if (PlayerData == null || PlayerData.Inventory.Count() == 0) return;
-
-        foreach (Item item in PlayerData.Inventory_Clone)
+        public static bool ResurrectPlayer(Player player, PlayerData playerData)
         {
-            item.ChangeItemOwner(PlayerData.Player, player);
-            item.Give(player);
-        }
-        PlayerData.Inventory_Clone.Clear();
-    }
+            if (player == null && playerData == null) return false;
 
-    public static void StoreEffects(Player player)
-    {
-        PlayerData PlayerData = GetPlayerData(player);
-        if (PlayerData == null || player.ActiveEffects.Count() == 0) return;
+            player.Role.Set(playerData.Class, RoleSpawnFlags.None);
+            player.Position = playerData.Position;
+            player.Health = playerData.Health;
 
-        foreach (StatusEffectBase effectBase in player.ActiveEffects)
-            PlayerData.Effects.Add(new EffectList(effectBase.GetEffectType(), effectBase.Intensity, effectBase.Duration));
-    }
-    public static void RestoreEffects(Player player)
-    {
-        PlayerData PlayerData = GetPlayerData(player);
-        if (PlayerData == null || PlayerData.Effects.Count() == 0) return;
-
-        foreach (var effectType in PlayerData.Effects)
-        {
-            player.EnableEffect(effectType.effectType, effectType.Intensity, effectType.Duration);
-            PlayerData.Effects.Remove(effectType);
-        }
-    }
-
-    public static void StoreAmmo(Player player)
-    {
-        PlayerData PlayerData = GetPlayerData(player);
-        if (PlayerData == null || player.Ammo.Count == 0) return;
-
-        foreach (ItemType ammoType in ammoTypes)
-            if (player.Ammo.TryGetValue(ammoType, out ushort ammoAmount))
-                PlayerData.Ammo[ammoType] = ammoAmount;
-    }
-    public static void RestoreAmmo(Player player)
-    {
-        PlayerData PlayerData = GetPlayerData(player);
-        if (PlayerData == null || PlayerData.Ammo.Count == 0) return;
-        foreach (var ammoType in PlayerData.Ammo.Keys)
-            player.AddAmmo(ammoType.GetAmmoType(), PlayerData.Ammo[ammoType]);
-    }
-    
-    [CommandHandler(typeof(ClientCommandHandler))]
-    public class AutoReconnectAccept : ICommand
-    {
-        public string Command => "accept";
-        public string Description => "Accept the server storing your data for plugin useage.";
-        public string[] Aliases => Array.Empty<string>();
-
-        public bool Execute(ArraySegment<string> arguments, ICommandSender? sender, out string response)
-        {
-            response = "You are now accepted.";
-
-            Player player = Player.Get(sender);
-            EventHandlers.AcceptPlayers.Add(player.UserId);
-            player.ClearBroadcasts();
-            Log.Info($"Player {player.Nickname} accepted.");
-            
+            if (AutoReconnect.Instance.Config.RecoveryAmmo) RestoreAmmo(player);
+            if (AutoReconnect.Instance.Config.RecoveryInventory) RestoreInventory(player);
+            if (AutoReconnect.Instance.Config.RecoveryEffect) RestoreEffects(player);
+            DisconnectedPlayers.Remove(player.UserId);
             return true;
         }
-    }
-    
-    public class AutoReconnectDeny : ICommand
-    {
-        public string Command => "deny";
-        public string Description => "Deny the server storing your data for plugin useage.";
-        public string[] Aliases => Array.Empty<string>();
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender? sender, out string response)
+        public static void CloneInventory(Player player)
         {
-            response = "You are now denied.";
-            
-            Player player = Player.Get(sender);
-            Log.Info($"Player {player.Nickname} denied.");
-            
-            return true;
+            PlayerData PlayerData = GetPlayerData(player);
+            if (PlayerData == null) return;
+
+            foreach (Item item in PlayerData.Inventory)
+                PlayerData.Inventory_Clone.Add(item.Clone());
+        }
+
+        public static void RestoreInventory(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+            if (PlayerData == null || PlayerData.Inventory.Count() == 0) return;
+
+            foreach (Item item in PlayerData.Inventory_Clone)
+            {
+                item.ChangeItemOwner(PlayerData.Player, player);
+                item.Give(player);
+            }
+
+            PlayerData.Inventory_Clone.Clear();
+        }
+
+        public static void StoreEffects(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+            if (PlayerData == null || player.ActiveEffects.Count() == 0) return;
+
+            foreach (StatusEffectBase effectBase in player.ActiveEffects)
+                PlayerData.Effects.Add(new EffectList(effectBase.GetEffectType(), effectBase.Intensity,
+                    effectBase.Duration));
+        }
+
+        public static void RestoreEffects(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+            if (PlayerData == null || PlayerData.Effects.Count() == 0) return;
+
+            foreach (var effectType in PlayerData.Effects)
+            {
+                player.EnableEffect(effectType.effectType, effectType.Intensity, effectType.Duration);
+                PlayerData.Effects.Remove(effectType);
+            }
+        }
+
+        public static void StoreAmmo(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+            if (PlayerData == null || player.Ammo.Count == 0) return;
+
+            foreach (ItemType ammoType in ammoTypes)
+                if (player.Ammo.TryGetValue(ammoType, out ushort ammoAmount))
+                    PlayerData.Ammo[ammoType] = ammoAmount;
+        }
+
+        public static void RestoreAmmo(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+            if (PlayerData == null || PlayerData.Ammo.Count == 0) return;
+            foreach (var ammoType in PlayerData.Ammo.Keys)
+            {
+                player.AddAmmo(ammoType.GetAmmoType(), PlayerData.Ammo[ammoType]);
+            }
         }
     }
-}
 }
