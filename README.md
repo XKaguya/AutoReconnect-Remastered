@@ -57,7 +57,12 @@ recovery_inventory: true
 recovery_ammo: true
 # Whether or not to spawn disconnected player's ragdoll.
 spawn_ragdoll: false
-# Text that will be shown to the player at reconnect
+# Text that will be shown to the player at reconnect.
 reconnect_text: 'You have been reconnected. You will be respawn to stored status.'
+# Text that will be shown to the player who enabled DNT.
+d_n_t__hint: |-
+  Plugin requires your auth for storing data. Do you want to accept that ?
+  If accepted you're able to enjoy reconnect respawn features.
+  Type .accept in console for accept.And .deny for deny.
 ```
 
