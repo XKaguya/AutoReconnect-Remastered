@@ -48,8 +48,8 @@ recovery_inventory: true
 # Whether or not to restore player's ammo. Player will respawn with same ammo.
 recovery_ammo: true
 # Whether or not to spawn disconnected player's ragdoll.
-spawn_ragdoll: true
-# Language (en_US, zh_CN)
-language: 'zh_CN'
+spawn_ragdoll: false
+# Text that will be shown to the player at reconnect
+reconnect_text: 'You have been reconnected. You will be respawn to stored status.'
 ```
 
