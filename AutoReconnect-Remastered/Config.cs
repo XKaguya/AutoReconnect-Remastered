@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using Exiled.API.Interfaces;
 
@@ -28,6 +27,6 @@ namespace AutoReconnectRemastered
         public string ReconnectText { get; set; } = "You have been reconnected. You will be respawn to stored status.";
 
         [Description("Text that will be shown to the player who enabled DNT.")]
-        public string DNT_Hint { get; set; } = "Server need your auth for storing data. Do you accept it ? Type .accept or .deny for response. If accepted, you'll able to enjoy respawn plugins features.";
+        public Exiled.API.Features.Broadcast JoinedBroadcast { get; private set; } = new("Plugin requires your auth for storing data. Do you want to accept that ?\nIf accepted you''re able to enjoy reconnect respawn features.\nType .accept in console for accept .deny for deny.", 15);
     }
 }
