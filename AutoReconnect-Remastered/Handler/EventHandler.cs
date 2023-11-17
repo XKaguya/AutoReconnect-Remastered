@@ -23,7 +23,7 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstarted;
-            if (!AutoReconnect.Instance.Config.SpawnRagdoll) return;
+            if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdolls;
         }
@@ -36,7 +36,7 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundstarted;
-            if (!AutoReconnect.Instance.Config.SpawnRagdoll) return;
+            if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
         }
@@ -61,6 +61,7 @@ namespace AutoReconnectRemastered
         public void OnRoundstarted()
         {
             InitAcceptPlayers();
+            Log.Debug("Player list initialized.");
         }
 
         public void OnLeft(LeftEventArgs ev)
@@ -70,7 +71,8 @@ namespace AutoReconnectRemastered
                 if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
                 {
                     ARRAPI.AddPlayer(ev.Player);
-                    Log.Info($"Player {ev.Player.Nickname} data stored.");
+                    ev.Player.ClearInventory();
+                    Log.Debug($"Player {ev.Player.Nickname} data stored.");
                 }
             }
         }
@@ -81,8 +83,8 @@ namespace AutoReconnectRemastered
             {
                 if (ev.Player.ReferenceHub.authManager.DoNotTrack)
                 {
-                    Log.Info($"Player {ev.Player.Nickname} has DNT on.");
-                    ev.Player.Broadcast(AutoReconnect.Instance.Config.JoinedBroadcast);
+                    Log.Debug($"Player {ev.Player.Nickname} has DNT on.");
+                    ev.Player.Broadcast(AutoReconnect.Instance?.Config.JoinedBroadcast);
                 }
             }
         }
@@ -105,9 +107,10 @@ namespace AutoReconnectRemastered
             if (playerData == null) return;
 
             if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
-                ev.Player.Broadcast(5, AutoReconnect.Instance.Config.ReconnectText, Broadcast.BroadcastFlags.Normal,
-                    true);
-            ARRAPI.DisconnectedPlayers.Remove(ev.Player.UserId);
+            {
+                ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+            }
+            ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
         }
     }
 }

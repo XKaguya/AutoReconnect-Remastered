@@ -20,7 +20,7 @@ namespace AutoReconnectRemastered
                 Player player = Player.Get(sender);
                 EventHandlers.AcceptPlayers.Add(player.UserId);
                 player.ClearBroadcasts();
-                Log.Info($"Player {player.Nickname} accepted.");
+                Log.Debug($"Player {player.Nickname} accepted.");
             
                 return true;
             }
@@ -37,7 +37,7 @@ namespace AutoReconnectRemastered
                 response = "You are now denied.";
             
                 Player player = Player.Get(sender);
-                Log.Info($"Player {player.Nickname} denied.");
+                Log.Debug($"Player {player.Nickname} denied.");
             
                 return true;
             }

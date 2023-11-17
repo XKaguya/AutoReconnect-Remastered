@@ -9,6 +9,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
+using Log = PluginAPI.Core.Log;
 
 namespace API
 {
@@ -23,7 +24,7 @@ namespace API
             ItemType.Ammo44cal
         };
 
-        public static Dictionary<string, PlayerData> DisconnectedPlayers = new();
+        public static Dictionary<string, PlayerData>? DisconnectedPlayers = new();
         public static void AddPlayer(Player player)
         {
             if (player == null && !player.IsAlive) return;
@@ -33,27 +34,27 @@ namespace API
                 Ammo = new Dictionary<ItemType, ushort>(),
                 Class = player.Role.Type,
                 Health = player.Health,
-                Inventory = player.Items.ToHashSet(),
-                Inventory_Clone = new List<Item>(),
+                Inventory = new HashSet<Item>(),
                 Name = player.Nickname,
                 Position = player.Position,
                 Effects = new(),
                 Player = player,
             };
             DisconnectedPlayers.Add(player.UserId, PlayerHandler);
-            CloneInventory(player);
-            StoreAmmo(player);
-            StoreEffects(player);
+            
+            if (AutoReconnect.Instance.Config.RecoveryInventory) CloneInventory(player);
+            if (AutoReconnect.Instance.Config.RecoveryAmmo) StoreAmmo(player);
+            if (AutoReconnect.Instance.Config.RecoveryEffect) StoreEffects(player);
         }
 
-        public static void ClearPlayerData() => DisconnectedPlayers.Clear();
+        public static void ClearPlayerData() => DisconnectedPlayers?.Clear();
 
         public static PlayerData GetPlayerData(Player player) => DisconnectedPlayers.ContainsKey(player.UserId) ? DisconnectedPlayers[player.UserId] : null;
 
         public static void RemovePlayerData(Player player)
         {
             if (player == null && !DisconnectedPlayers.ContainsKey(player.UserId)) return;
-            DisconnectedPlayers.Remove(player.UserId);
+            DisconnectedPlayers?.Remove(player.UserId);
         }
 
         public static bool ResurrectPlayer(Player player, PlayerData playerData)
@@ -67,7 +68,7 @@ namespace API
             if (AutoReconnect.Instance.Config.RecoveryAmmo) RestoreAmmo(player);
             if (AutoReconnect.Instance.Config.RecoveryInventory) RestoreInventory(player);
             if (AutoReconnect.Instance.Config.RecoveryEffect) RestoreEffects(player);
-            DisconnectedPlayers.Remove(player.UserId);
+            DisconnectedPlayers?.Remove(player.UserId);
             return true;
         }
 
@@ -76,22 +77,23 @@ namespace API
             PlayerData PlayerData = GetPlayerData(player);
             if (PlayerData == null) return;
 
-            foreach (Item item in PlayerData.Inventory)
-                PlayerData.Inventory_Clone.Add(item.Clone());
+            foreach (Item item in player.Items.ToHashSet())
+            {
+                PlayerData.Inventory.Add(item.Clone());
+            }
         }
-
+        
         public static void RestoreInventory(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Inventory.Count() == 0) return;
+            if (PlayerData == null || PlayerData.Inventory.Count == 0) return;
 
-            foreach (Item item in PlayerData.Inventory_Clone)
+            foreach (Item item in PlayerData.Inventory)
             {
-                item.ChangeItemOwner(PlayerData.Player, player);
                 item.Give(player);
             }
-
-            PlayerData.Inventory_Clone.Clear();
+            
+            PlayerData.Inventory.Clear();
         }
 
         public static void StoreEffects(Player player)
@@ -100,14 +102,15 @@ namespace API
             if (PlayerData == null || player.ActiveEffects.Count() == 0) return;
 
             foreach (StatusEffectBase effectBase in player.ActiveEffects)
-                PlayerData.Effects.Add(new EffectList(effectBase.GetEffectType(), effectBase.Intensity,
-                    effectBase.Duration));
+            {
+                PlayerData.Effects.Add(new EffectList(effectBase.GetEffectType(), effectBase.Intensity, effectBase.Duration));
+            }
         }
 
         public static void RestoreEffects(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Effects.Count() == 0) return;
+            if (PlayerData == null || PlayerData.Effects.Count == 0) return;
 
             foreach (var effectType in PlayerData.Effects)
             {
@@ -122,8 +125,12 @@ namespace API
             if (PlayerData == null || player.Ammo.Count == 0) return;
 
             foreach (ItemType ammoType in ammoTypes)
+            {
                 if (player.Ammo.TryGetValue(ammoType, out ushort ammoAmount))
+                {
                     PlayerData.Ammo[ammoType] = ammoAmount;
+                }
+            }
         }
 
         public static void RestoreAmmo(Player player)

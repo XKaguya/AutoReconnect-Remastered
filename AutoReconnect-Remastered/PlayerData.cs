@@ -22,9 +22,7 @@ namespace API.Other
 
         public float Health { get; set; }
 
-        public IEnumerable<Item> Inventory { get; set; }
-        
-        public List<Item> Inventory_Clone { get; set; }
+        public HashSet<Item> Inventory { get; set; }
 
         public Player Player { get; set; }
 
