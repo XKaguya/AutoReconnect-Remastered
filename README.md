@@ -24,6 +24,14 @@ Automaticly spawn disconnected player as what it was.
 
 The player will have same HP, same Inventory, same Ammo and etc.
 
+```
+Restore player's Role.
+Restore player's HP.
+Restore player's Ammo.
+Restore player's Inventory.
+Restore player's Effect with Intensity and Duration.
+```
+
 Full Auto plugin. No need do anything else than install.
 
 About player who is using *DNT*, that `.accept` or `.deny` is required.
@@ -34,13 +42,6 @@ See:
   <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/DNT%20Hint.png">
 </div>
 
-```
-Restore player's Role.
-Restore player's HP.
-Restore player's Ammo.
-Restore player's Inventory.
-Restore player's Effect with Intensity and Duration.
-```
 
 # Configuration
 
