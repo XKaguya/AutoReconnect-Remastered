@@ -14,11 +14,11 @@
   "project": {
     "version": "3.0.0",
     "restore": {
-      "projectUniqueName": "D:\\AutoReconnect-Remastered\\AutoReconnect-Remastered\\AutoReconnect-Remastered.csproj",
+      "projectUniqueName": "D:\\SL Plugins\\Akizuki Kaguya\\AutoReconnect-Remastered-Public\\AutoReconnect-Remastered\\AutoReconnect-Remastered.csproj",
       "projectName": "AutoReconnect-Remastered",
-      "projectPath": "D:\\AutoReconnect-Remastered\\AutoReconnect-Remastered\\AutoReconnect-Remastered.csproj",
+      "projectPath": "D:\\SL Plugins\\Akizuki Kaguya\\AutoReconnect-Remastered-Public\\AutoReconnect-Remastered\\AutoReconnect-Remastered.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "D:\\AutoReconnect-Remastered\\AutoReconnect-Remastered\\obj\\",
+      "outputPath": "D:\\SL Plugins\\Akizuki Kaguya\\AutoReconnect-Remastered-Public\\AutoReconnect-Remastered\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

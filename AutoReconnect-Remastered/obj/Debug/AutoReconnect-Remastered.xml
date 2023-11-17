@@ -4,16 +4,5 @@
         <name>AutoReconnect-Remastered</name>
     </assembly>
     <members>
-        <member name="T:AutoReconnectRemastered.Config">
-            <inheritdoc />
-        </member>
-        <member name="P:AutoReconnectRemastered.Config.IsEnabled">
-            <inheritdoc />
-        </member>
-        <member name="P:AutoReconnectRemastered.Config.Debug">
-            <summary>
-            Gets or sets a value indicating whether debug messages will be shown.
-            </summary>
-        </member>
     </members>
 </doc>
