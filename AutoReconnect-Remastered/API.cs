@@ -9,11 +9,10 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
-using Log = PluginAPI.Core.Log;
 
-namespace API;
-
-public static class API
+namespace API
+{
+    public static class API
 {
     private static HashSet<ItemType> ammoTypes = new()
         {
@@ -174,4 +173,5 @@ public static class API
             return true;
         }
     }
+}
 }

@@ -9,9 +9,9 @@ using PluginAPI.Core;
 using ARRAPI = API.API;
 using Player = Exiled.API.Features.Player;
 
-namespace AutoReconnectRemastered;
-
-public class EventHandlers
+namespace AutoReconnectRemastered
+{
+    public class EventHandlers
 {
     public static Dictionary<string, Player> DisconnectedPlayers = new();
     
@@ -71,8 +71,7 @@ public class EventHandlers
             if (ev.Player.ReferenceHub.authManager.DoNotTrack)
             {
                 Log.Info($"Player {ev.Player.Nickname} has DNT on.");
-                var text = AutoReconnect.Instance.Config.DNT_Hint;
-                ev.Player.Broadcast(60, text, Broadcast.BroadcastFlags.Normal);
+                ev.Player.Broadcast(60, AutoReconnect.Instance.Config.DNT_Hint, Broadcast.BroadcastFlags.Normal);
             }
         }
     }
@@ -97,4 +96,5 @@ public class EventHandlers
             ev.Player.Broadcast(5, AutoReconnect.Instance.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
         ARRAPI.Players.Remove(ev.Player.UserId);
     }
+}
 }
