@@ -30,6 +30,14 @@ The player will have same HP, same Inventory, same Ammo and etc.
 
 Full Auto plugin. No need do anything else than install.
 
+About player who is using *DNT*, that `.accept` or `.deny` is required.
+
+See: 
+
+<div align="center">
+  <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/DNT%20Hint.png">
+</div>
+
 ```
 Restore player's Role.
 Restore player's HP.
