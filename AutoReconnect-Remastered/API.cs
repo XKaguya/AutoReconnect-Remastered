@@ -115,8 +115,8 @@ namespace API
             foreach (var effectType in PlayerData.Effects)
             {
                 player.EnableEffect(effectType.effectType, effectType.Intensity, effectType.Duration);
-                PlayerData.Effects.Remove(effectType);
             }
+            PlayerData.Effects.Clear();
         }
 
         public static void StoreAmmo(Player player)
@@ -141,6 +141,7 @@ namespace API
             {
                 player.AddAmmo(ammoType.GetAmmoType(), PlayerData.Ammo[ammoType]);
             }
+            PlayerData.Ammo.Clear();
         }
     }
 }
