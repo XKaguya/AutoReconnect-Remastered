@@ -43,24 +43,12 @@ namespace AutoReconnectRemastered
 
         public void OnWaitingForPlayers() => ARRAPI.ClearPlayerData();
 
-        public static void InitAcceptPlayers()
-        {
-            var AllPlayers = Player.List.ToList();
-            foreach (var player in AllPlayers)
-            {
-                if (!player.ReferenceHub.authManager.DoNotTrack)
-                {
-                    AcceptPlayers.Add(player.UserId);
-                }
-            }
-        }
-
         public void OnSpawningRagdolls(SpawningRagdollEventArgs ev) =>
             ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
 
         public void OnRoundstarted()
         {
-            InitAcceptPlayers();
+            ARRAPI.GetAcceptPlayers();
             Log.Debug("Player list initialized.");
         }
 
@@ -106,6 +94,7 @@ namespace AutoReconnectRemastered
             PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
             if (playerData == null) return;
 
+            ARRAPI.GetAcceptPlayers();
             if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
             {
                 ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
