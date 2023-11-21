@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using API.Other;
 using Exiled.API.Enums;
 using Exiled.Events.Commands.Reload;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp330;
+using Exiled.Events.Patches.Events.Scp330;
 using PlayerRoles;
 using PluginAPI.Core;
 using ARRAPI = API.API;
@@ -59,6 +62,13 @@ namespace AutoReconnectRemastered
                 if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
                 {
                     ARRAPI.AddPlayer(ev.Player);
+                    if (AutoReconnect.Instance.Config.RandomSpec)
+                    {
+                        if (ev.Player.Role.Team == Team.SCPs)
+                        {
+                            ARRAPI.RandomSpec(ev.Player);
+                        }
+                    }
                     ev.Player.ClearInventory();
                     Log.Debug($"Player {ev.Player.Nickname} data stored.");
                 }
@@ -94,12 +104,19 @@ namespace AutoReconnectRemastered
             PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
             if (playerData == null) return;
 
-            ARRAPI.GetAcceptPlayers();
-            if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+            if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
             {
-                ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                ARRAPI.GetAcceptPlayers();
+                if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                {
+                    ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                }
+                ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
             }
-            ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+            else
+            {
+                ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+            }
         }
     }
 }

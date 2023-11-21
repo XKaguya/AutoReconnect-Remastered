@@ -22,6 +22,9 @@ namespace AutoReconnectRemastered
     
         [Description("Whether or not to spawn disconnected player's ragdoll.")]
         public bool SpawnRagdoll { get; set; } = false;
+        
+        [Description("Whether or not to randomly choose a spectator to be the disconnected SCP.")]
+        public bool RandomSpec { get; set; } = false;
     
         [Description("Text that will be shown to the player at reconnect.")]
         public string ReconnectText { get; set; } = "You have been reconnected. You will be respawn to stored status.";

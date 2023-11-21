@@ -9,6 +9,8 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
+using Exiled.API.Features.Roles;
+using InventorySystem;
 using Log = PluginAPI.Core.Log;
 
 namespace API
@@ -25,6 +27,38 @@ namespace API
         };
 
         public static Dictionary<string, PlayerData>? DisconnectedPlayers = new();
+
+        public static void GetAcceptPlayers()
+        {
+            var AllPlayers = Player.List.ToList();
+            foreach (var player in AllPlayers)
+            {
+                if (!player.ReferenceHub.authManager.DoNotTrack)
+                {
+                    if (!EventHandlers.AcceptPlayers.Contains(player.UserId))
+                    {
+                        EventHandlers.AcceptPlayers.Add(player.UserId);
+                    }
+                }
+            }
+        }
+
+        public static void RandomSpec(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+            
+            var players = Player.List.Where(p => p.Role.Type == RoleTypeId.Spectator);
+            Player[] playerArray = players.ToArray();
+            
+            Random random = new Random();
+            int randomNumber = random.Next(0, playerArray.Length);
+            Player selectedPlayer = playerArray[randomNumber];
+            
+            Log.Debug($"Choosen player: {selectedPlayer}");
+
+            ResurrectPlayer(selectedPlayer, PlayerData);
+        }
+        
         public static void AddPlayer(Player player)
         {
             if (player == null && !player.IsAlive) return;
@@ -95,7 +129,7 @@ namespace API
             
             PlayerData.Inventory.Clear();
         }
-
+        
         public static void StoreEffects(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
