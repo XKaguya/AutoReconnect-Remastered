@@ -54,6 +54,8 @@ recovery_inventory: true
 recovery_ammo: true
 # Whether or not to spawn disconnected player's ragdoll.
 spawn_ragdoll: false
+# Whether or not to randomly choose a spectator to be the disconnected SCP.
+random_spec: true
 # Text that will be shown to the player at reconnect.
 reconnect_text: 'You have been reconnected. You will be respawn to stored status.'
 # Text that will be shown to the player who enabled DNT.
