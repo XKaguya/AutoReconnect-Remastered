@@ -89,8 +89,7 @@ namespace AutoReconnectRemastered
 
         public void OnDying(DyingEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow ||
-                ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
+            if (ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
                 ARRAPI.RemovePlayerData(ev.Player);
             else
             {
