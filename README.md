@@ -63,5 +63,9 @@ d_n_t__hint: |-
   Plugin requires your auth for storing data. Do you want to accept that ?
   If accepted you're able to enjoy reconnect respawn features.
   Type .accept in console for accept.And .deny for deny.
+# The message that sent to all players while scp is replaced by spectator.
+disconnected_message: '{0} has been replaced by player {1}'
+# The way plugin to show for spectator players. Set 1 for Hint, 2 for Broadcast.
+disconnected_message_type: 1
 ```
 
