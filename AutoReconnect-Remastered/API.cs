@@ -57,6 +57,31 @@ namespace API
             Log.Debug($"Choosen player: {selectedPlayer}");
 
             ResurrectPlayer(selectedPlayer, PlayerData);
+            
+            var message = $"{PlayerData.Class} has been repalced by player {player.Nickname}";
+
+            if (AutoReconnect.Instance.Config.DisconnectedMessageType == 1)
+            {
+                foreach (var player1 in Player.List)
+                {
+                    player1.ShowHint(message);
+                }
+            }
+
+            if (AutoReconnect.Instance.Config.DisconnectedMessageType == 2)
+            {
+                var alivePlayers = Player.List.Where(player => player.Role.IsAlive);
+                foreach (var player1 in alivePlayers)
+                {
+                    player1.ShowHint(message);
+                }
+
+                var deadPlayers = Player.List.Where(player => !player.Role.IsAlive);
+                foreach (var player2 in deadPlayers)
+                {
+                    player2.Broadcast(10, message, Broadcast.BroadcastFlags.Normal, true);
+                }
+            }
         }
         
         public static void AddPlayer(Player player)
