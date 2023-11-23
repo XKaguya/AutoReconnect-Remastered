@@ -30,6 +30,7 @@ Restore player's HP.
 Restore player's Ammo.
 Restore player's Inventory.
 Restore player's Effect with Intensity and Duration.
+Replace disconnected Scp player to a random spectator player.
 ```
 
 Full Auto plugin. No need do anything else than install.
