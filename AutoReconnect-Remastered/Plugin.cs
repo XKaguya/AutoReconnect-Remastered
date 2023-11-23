@@ -1,5 +1,7 @@
 using System;
 using Exiled.API.Features;
+using PlayerRoles;
+using UnityEngine;
 
 namespace AutoReconnectRemastered
 {

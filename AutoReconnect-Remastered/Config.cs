@@ -31,5 +31,11 @@ namespace AutoReconnectRemastered
 
         [Description("Text that will be shown to the player who enabled DNT.")]
         public Exiled.API.Features.Broadcast JoinedBroadcast { get; private set; } = new("Plugin requires your auth for storing data. Do you want to accept that ?\nIf accepted you''re able to enjoy reconnect respawn features.\nType .accept in console for accept .deny for deny.", 15);
+
+        [Description("The message that sent to all players while scp is replaced by spectator.")]
+        public string DisconnectedMessage { get; set; } = "{0} has been replaced by player {1}";
+        
+        [Description("The way plugin to show for spectator players. Set 1 for Hint, 2 for Broadcast.")]
+        public int DisconnectedMessageType { get; set; } = 1;
     }
 }

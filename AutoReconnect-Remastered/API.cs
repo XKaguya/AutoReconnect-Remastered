@@ -58,7 +58,7 @@ namespace API
 
             ResurrectPlayer(selectedPlayer, PlayerData);
             
-            var message = $"{PlayerData.Class} has been repalced by player {player.Nickname}";
+            var message = string.Format(AutoReconnect.Instance.Config.DisconnectedMessage, PlayerData.Class, player.Nickname);
 
             if (AutoReconnect.Instance.Config.DisconnectedMessageType == 1)
             {
