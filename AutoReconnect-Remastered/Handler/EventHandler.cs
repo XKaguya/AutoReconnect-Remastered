@@ -102,10 +102,11 @@ namespace AutoReconnectRemastered
         {
             PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
             if (playerData == null) return;
+            
+            ARRAPI.GetAcceptPlayers();
 
             if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
             {
-                ARRAPI.GetAcceptPlayers();
                 if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
                 {
                     ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
@@ -114,6 +115,7 @@ namespace AutoReconnectRemastered
             }
             else
             {
+                ARRAPI.ResurrectPlayer(ev.Player, playerData);
                 ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
             }
         }
