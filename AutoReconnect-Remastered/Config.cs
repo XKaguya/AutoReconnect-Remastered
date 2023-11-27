@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Interfaces;
+using PlayerRoles;
 
 namespace AutoReconnectRemastered
 {
@@ -40,6 +41,6 @@ namespace AutoReconnectRemastered
         public int DisconnectedMessageType { get; set; } = 1;
         
         [Description("The information used for other plugins to avoid conflicts. Set to default if you have no conflict.")]
-        public SpawnReason SpawnReason { get; set; } = SpawnReason.ForceClass;
+        public RoleChangeReason SpawnReason { get; set; } = RoleChangeReason.RemoteAdmin;
     }
 }

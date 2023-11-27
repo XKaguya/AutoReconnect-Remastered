@@ -121,7 +121,7 @@ namespace API
         {
             if (player == null && playerData == null) return false;
 
-            player.Role.Set(playerData.Class, AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
+            player.Role.Set(playerData.Class, (SpawnReason)AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
             player.Position = playerData.Position;
             player.Health = playerData.Health;
 
