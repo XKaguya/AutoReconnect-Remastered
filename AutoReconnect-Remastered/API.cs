@@ -9,6 +9,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
+using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using InventorySystem;
 using Log = PluginAPI.Core.Log;
@@ -33,7 +34,7 @@ namespace API
             var AllPlayers = Player.List.ToList();
             foreach (var player in AllPlayers)
             {
-                if (!player.ReferenceHub.authManager.DoNotTrack)
+                if (!player.DoNotTrack)
                 {
                     if (!EventHandlers.AcceptPlayers.Contains(player.UserId))
                     {
@@ -120,7 +121,7 @@ namespace API
         {
             if (player == null && playerData == null) return false;
 
-            player.Role.Set(playerData.Class, RoleSpawnFlags.None);
+            player.Role.Set(playerData.Class, AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
             player.Position = playerData.Position;
             player.Health = playerData.Health;
 

@@ -79,7 +79,7 @@ namespace AutoReconnectRemastered
         {
             if (!AcceptPlayers.Contains(ev.Player.UserId))
             {
-                if (ev.Player.ReferenceHub.authManager.DoNotTrack)
+                if (ev.Player.DoNotTrack)
                 {
                     Log.Debug($"Player {ev.Player.Nickname} has DNT on.");
                     ev.Player.Broadcast(AutoReconnect.Instance?.Config.JoinedBroadcast);

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Exiled.API.Enums;
 using Exiled.API.Interfaces;
 
 namespace AutoReconnectRemastered
@@ -37,5 +38,8 @@ namespace AutoReconnectRemastered
         
         [Description("The way plugin to show for spectator players. Set 1 for Hint, 2 for Broadcast.")]
         public int DisconnectedMessageType { get; set; } = 1;
+        
+        [Description("The information used for other plugins to avoid conflicts. Set to default if you have no conflict.")]
+        public SpawnReason SpawnReason { get; set; } = SpawnReason.ForceClass;
     }
 }
