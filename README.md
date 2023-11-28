@@ -68,5 +68,7 @@ d_n_t__hint: |-
 disconnected_message: '{0} has been replaced by player {1}'
 # The way plugin to show for spectator players. Set 1 for Hint, 2 for Broadcast.
 disconnected_message_type: 1
+# The information used for other plugins to avoid conflicts. Set to default if you have no conflict.
+spawn_reason: RemoteAdmin
 ```
 
