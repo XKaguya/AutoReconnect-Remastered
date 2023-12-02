@@ -47,6 +47,13 @@ See:
 # Configuration
 
 ```
+auto_reconnect_remastered:
+# Whether or not this plugin is enabled.
+is_enabled: true
+# Whether or not to display debug messages in the server console.
+debug: false
+# Whether or not to respawn player. Set to false and it WILL NOT respawn player.
+respawn_enabled: true
 # Whether or not to restore player's active effect. Player will respawn with same effect strengh and remain time.
 recovery_effect: true
 # Whether or not to restore player's inventory. Player will respawn with same inventory.
@@ -55,15 +62,23 @@ recovery_inventory: true
 recovery_ammo: true
 # Whether or not to spawn disconnected player's ragdoll.
 spawn_ragdoll: false
-# Whether or not to randomly choose a spectator to be the disconnected SCP.
-random_spec: true
+# Whether or not to randomly choose a spectator to be the disconnected SCP. While RespawnEnabled is false, this config will take the place of the respawn.
+random_spec: false
 # Text that will be shown to the player at reconnect.
 reconnect_text: 'You have been reconnected. You will be respawn to stored status.'
 # Text that will be shown to the player who enabled DNT.
-d_n_t__hint: |-
-  Plugin requires your auth for storing data. Do you want to accept that ?
-  If accepted you're able to enjoy reconnect respawn features.
-  Type .accept in console for accept.And .deny for deny.
+joined_broadcast:
+# The broadcast content
+  content: |-
+    Plugin requires your auth for storing data. Do you want to accept that ?
+    If accepted you''re able to enjoy reconnect respawn features.
+    Type .accept in console for accept .deny for deny.
+  # The broadcast duration
+  duration: 15
+  # The broadcast type
+  type: Normal
+  # Indicates whether the broadcast should be shown or not
+  show: true
 # The message that sent to all players while scp is replaced by spectator.
 disconnected_message: '{0} has been replaced by player {1}'
 # The way plugin to show for spectator players. Set 1 for Hint, 2 for Broadcast.
