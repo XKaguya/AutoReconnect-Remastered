@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using Exiled.API.Enums;
 using Exiled.API.Interfaces;
 using PlayerRoles;
 
@@ -12,6 +11,9 @@ namespace AutoReconnectRemastered
 
         [Description("Whether or not to display debug messages in the server console.")]
         public bool Debug { get; set; } = false;
+        
+        [Description("Whether or not to respawn player. Set to false and it WILL NOT respawn player.")]
+        public bool RespawnEnabled { get; set; } = true;
     
         [Description("Whether or not to restore player's active effect. Player will respawn with same effect strengh and remain time.")]
         public bool RecoveryEffect { get; set; } = true;
@@ -21,11 +23,11 @@ namespace AutoReconnectRemastered
     
         [Description("Whether or not to restore player's ammo. Player will respawn with same ammo.")]
         public bool RecoveryAmmo { get; set; } = true;
-    
+        
         [Description("Whether or not to spawn disconnected player's ragdoll.")]
         public bool SpawnRagdoll { get; set; } = false;
         
-        [Description("Whether or not to randomly choose a spectator to be the disconnected SCP.")]
+        [Description("Whether or not to randomly choose a spectator to be the disconnected SCP. While RespawnEnabled is false, this config will take the place of the respawn.")]
         public bool RandomSpec { get; set; } = false;
     
         [Description("Text that will be shown to the player at reconnect.")]

@@ -67,6 +67,7 @@ namespace AutoReconnectRemastered
                         if (ev.Player.Role.Team == Team.SCPs)
                         {
                             ARRAPI.RandomSpec(ev.Player);
+                            Log.Debug("Random Spectator method executed.");
                         }
                     }
                     ev.Player.ClearInventory();
@@ -105,18 +106,24 @@ namespace AutoReconnectRemastered
             
             ARRAPI.GetAcceptPlayers();
 
-            if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
+            if (AutoReconnect.Instance.Config.RespawnEnabled)
             {
-                if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
                 {
-                    ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    {
+                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                    }
+                    ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
                 }
-                ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
-            }
-            else
-            {
-                ARRAPI.ResurrectPlayer(ev.Player, playerData);
-                ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                else
+                {
+                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    {
+                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                    }
+                    ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                }
             }
         }
     }
