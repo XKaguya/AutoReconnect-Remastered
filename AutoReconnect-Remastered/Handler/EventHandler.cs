@@ -142,6 +142,10 @@ namespace AutoReconnectRemastered
                             ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
                         }
                     }
+                    else
+                    {
+                        ARRAPI.RemovePlayerData(ev.Player);
+                    }
                 }
             }
         }
