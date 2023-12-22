@@ -8,11 +8,10 @@ using Exiled.API.Features.Items;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
-using CommandSystem;
 using Exiled.API.Enums;
-using Exiled.API.Features.Roles;
-using InventorySystem;
+using UnityEngine;
 using Log = PluginAPI.Core.Log;
+using Random = System.Random;
 
 namespace API
 {
@@ -42,6 +41,20 @@ namespace API
                     }
                 }
             }
+        }
+
+        public static bool IsReachedTimeLimit(Player player)
+        {
+            PlayerData PlayerData = GetPlayerData(player);
+
+            var time = DateTime.Now;
+            TimeSpan RetentionTimeSpan = TimeSpan.FromSeconds(AutoReconnect.Instance.Config.RetentionTime);
+            if ((time - PlayerData.Time) > RetentionTimeSpan)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static void RandomSpec(Player player)
@@ -99,6 +112,7 @@ namespace API
                 Position = player.Position,
                 Effects = new(),
                 Player = player,
+                Time = DateTime.Now,
             };
             DisconnectedPlayers.Add(player.UserId, PlayerHandler);
             

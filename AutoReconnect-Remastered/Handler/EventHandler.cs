@@ -1,16 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using API.Other;
 using Exiled.API.Enums;
-using Exiled.Events.Commands.Reload;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp330;
-using Exiled.Events.Patches.Events.Scp330;
 using PlayerRoles;
 using PluginAPI.Core;
 using ARRAPI = API.API;
-using Player = Exiled.API.Features.Player;
 
 namespace AutoReconnectRemastered
 {
@@ -108,21 +102,46 @@ namespace AutoReconnectRemastered
 
             if (AutoReconnect.Instance.Config.RespawnEnabled)
             {
-                if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
+                if (AutoReconnect.Instance.Config.RetentionTime == 0)
                 {
-                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
                     {
-                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                        {
+                            ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        }
+                        ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
                     }
-                    ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                    else
+                    {
+                        if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                        {
+                            ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        }
+                        ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                    }
                 }
                 else
                 {
-                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    if (!ARRAPI.IsReachedTimeLimit(ev.Player))
                     {
-                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
+                        {
+                            if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                            {
+                                ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                            }
+                            ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                        }
+                        else
+                        {
+                            if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                            {
+                                ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                            }
+                            ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                        }
                     }
-                    ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
                 }
             }
         }

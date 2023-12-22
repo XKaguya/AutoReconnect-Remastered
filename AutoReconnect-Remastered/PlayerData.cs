@@ -1,4 +1,4 @@
-using CustomPlayerEffects;
+using System;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
@@ -29,6 +29,8 @@ namespace API.Other
         public Dictionary<ItemType, ushort> Ammo { get; set; }
 
         public HashSet<EffectList> Effects { get; set; } = new();
+        
+        public DateTime Time { get; set; }
     }
     public class EffectList
     {

@@ -12,6 +12,9 @@ namespace AutoReconnectRemastered
         [Description("Whether or not to display debug messages in the server console.")]
         public bool Debug { get; set; } = false;
         
+        [Description("How long will the server hold the player's data. Set to 0 to disable time limit.")]
+        public int RetentionTime { get; set; } = 0;
+        
         [Description("Whether or not to respawn player. Set to false and it WILL NOT respawn player.")]
         public bool RespawnEnabled { get; set; } = true;
     
