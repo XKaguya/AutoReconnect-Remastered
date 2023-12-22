@@ -47,11 +47,12 @@ See:
 # Configuration
 
 ```
-auto_reconnect_remastered:
 # Whether or not this plugin is enabled.
 is_enabled: true
 # Whether or not to display debug messages in the server console.
 debug: false
+# How long will the server hold the player's data. Set to 0 to disable time limit.
+retention_time: 0
 # Whether or not to respawn player. Set to false and it WILL NOT respawn player.
 respawn_enabled: true
 # Whether or not to restore player's active effect. Player will respawn with same effect strengh and remain time.
@@ -69,16 +70,16 @@ reconnect_text: 'You have been reconnected. You will be respawn to stored status
 # Text that will be shown to the player who enabled DNT.
 joined_broadcast:
 # The broadcast content
-  content: |-
-    Plugin requires your auth for storing data. Do you want to accept that ?
-    If accepted you''re able to enjoy reconnect respawn features.
-    Type .accept in console for accept .deny for deny.
-  # The broadcast duration
-  duration: 15
-  # The broadcast type
-  type: Normal
-  # Indicates whether the broadcast should be shown or not
-  show: true
+content: |-
+  Plugin requires your auth for storing data. Do you want to accept that ?
+  If accepted you''re able to enjoy reconnect respawn features.
+  Type .accept in console for accept .deny for deny.
+# The broadcast duration
+duration: 15
+# The broadcast type
+type: Normal
+# Indicates whether the broadcast should be shown or not
+show: true
 # The message that sent to all players while scp is replaced by spectator.
 disconnected_message: '{0} has been replaced by player {1}'
 # The way plugin to show for spectator players. Set 1 for Hint, 2 for Broadcast.
