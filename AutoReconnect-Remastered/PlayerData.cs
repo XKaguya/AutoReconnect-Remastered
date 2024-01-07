@@ -31,6 +31,12 @@ namespace API.Other
         public HashSet<EffectList> Effects { get; set; } = new();
         
         public DateTime Time { get; set; }
+        
+        public int Exp { get; set; }
+        
+        public int Level { get; set; }
+        
+        public float Energy { get; set; }
     }
     public class EffectList
     {

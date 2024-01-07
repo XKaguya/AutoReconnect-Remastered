@@ -9,7 +9,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
-using UnityEngine;
+using Exiled.API.Features.Roles;
 using Log = PluginAPI.Core.Log;
 using Random = System.Random;
 
@@ -114,6 +114,14 @@ namespace API
                 Player = player,
                 Time = DateTime.Now,
             };
+            
+            if (player.Role.Type == RoleTypeId.Scp079)
+            {
+                PlayerHandler.Exp = player.Role.As<Scp079Role>().Experience;
+                PlayerHandler.Level = player.Role.As<Scp079Role>().Level;
+                PlayerHandler.Energy = player.Role.As<Scp079Role>().Energy;
+            }
+            
             DisconnectedPlayers.Add(player.UserId, PlayerHandler);
             
             if (AutoReconnect.Instance.Config.RecoveryInventory) CloneInventory(player);
@@ -139,9 +147,28 @@ namespace API
             player.Position = playerData.Position;
             player.Health = playerData.Health;
 
-            if (AutoReconnect.Instance.Config.RecoveryAmmo) RestoreAmmo(player);
-            if (AutoReconnect.Instance.Config.RecoveryInventory) RestoreInventory(player);
-            if (AutoReconnect.Instance.Config.RecoveryEffect) RestoreEffects(player);
+            if (AutoReconnect.Instance.Config.RecoveryAmmo)
+            {
+                RestoreAmmo(player);
+            }
+
+            if (AutoReconnect.Instance.Config.RecoveryInventory)
+            {
+                RestoreInventory(player);
+            }
+
+            if (AutoReconnect.Instance.Config.RecoveryEffect)
+            {
+                RestoreEffects(player);
+            }
+
+            if (playerData.Class == RoleTypeId.Scp079)
+            {
+                player.Role.As<Scp079Role>().Experience = playerData.Exp;
+                player.Role.As<Scp079Role>().Energy = playerData.Energy;
+                player.Role.As<Scp079Role>().Level = playerData.Level;
+            }
+            
             DisconnectedPlayers?.Remove(player.UserId);
             return true;
         }
@@ -149,7 +176,10 @@ namespace API
         public static void CloneInventory(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null) return;
+            if (PlayerData == null)
+            {
+                return;
+            }
 
             foreach (Item item in player.Items.ToHashSet())
             {
@@ -160,7 +190,10 @@ namespace API
         public static void RestoreInventory(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Inventory.Count == 0) return;
+            if (PlayerData == null || PlayerData.Inventory.Count == 0)
+            {
+                return;
+            }
 
             foreach (Item item in PlayerData.Inventory)
             {
@@ -173,7 +206,10 @@ namespace API
         public static void StoreEffects(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || player.ActiveEffects.Count() == 0) return;
+            if (PlayerData == null || player.ActiveEffects.Count() == 0)
+            {
+                return;
+            }
 
             foreach (StatusEffectBase effectBase in player.ActiveEffects)
             {
@@ -184,7 +220,10 @@ namespace API
         public static void RestoreEffects(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Effects.Count == 0) return;
+            if (PlayerData == null || PlayerData.Effects.Count == 0)
+            {
+                return;
+            }
 
             foreach (var effectType in PlayerData.Effects)
             {
@@ -196,7 +235,10 @@ namespace API
         public static void StoreAmmo(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || player.Ammo.Count == 0) return;
+            if (PlayerData == null || player.Ammo.Count == 0)
+            {
+                return;
+            }
 
             foreach (ItemType ammoType in ammoTypes)
             {
@@ -210,7 +252,10 @@ namespace API
         public static void RestoreAmmo(Player player)
         {
             PlayerData PlayerData = GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Ammo.Count == 0) return;
+            if (PlayerData == null || PlayerData.Ammo.Count == 0)
+            {
+                return;
+            }
             foreach (var ammoType in PlayerData.Ammo.Keys)
             {
                 player.AddAmmo(ammoType.GetAmmoType(), PlayerData.Ammo[ammoType]);

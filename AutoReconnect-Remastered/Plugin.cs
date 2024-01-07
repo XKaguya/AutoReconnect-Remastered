@@ -9,7 +9,7 @@ namespace AutoReconnectRemastered
     
         public override string Author => "RedLeaves & Rysik5318";
         public override string Name => "AutoReconnect-Remastered";
-        public override Version Version => new(1, 1, 0);
+        public override Version Version => new(1, 1, 1);
         public override Version RequiredExiledVersion => new(8, 4, 0);
     
         public EventHandlers EventHandler { get; private set; }
