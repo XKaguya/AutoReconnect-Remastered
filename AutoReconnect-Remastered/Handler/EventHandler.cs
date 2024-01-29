@@ -24,7 +24,6 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
-            Exiled.Events.Handlers.Scp173.BlinkingRequest += OnBlinkingRequest;
             Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
             if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
@@ -40,7 +39,6 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
-            Exiled.Events.Handlers.Scp173.BlinkingRequest -= OnBlinkingRequest;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
             if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
@@ -120,18 +118,6 @@ namespace AutoReconnectRemastered
             {
                 ARRAPI.BlockRevive(ev.Player);
             }
-        }
-
-        public void OnBlinkingRequest(BlinkingRequestEventArgs ev)
-        {
-            foreach (Player player in ev.Targets)
-            {
-                if (AcceptPlayers.Contains(player.UserId))
-                {
-                    ARRAPI.BlockRevive(player);
-                }
-            }
-            
         }
 
         public void OnAddingTarget(AddingTargetEventArgs ev)
