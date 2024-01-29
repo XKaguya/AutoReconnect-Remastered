@@ -21,10 +21,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\.editorconfig" Link=".editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="0Harmony">
         <HintPath>D:\SLUtils\dependencies\0Harmony.dll</HintPath>
       </Reference>

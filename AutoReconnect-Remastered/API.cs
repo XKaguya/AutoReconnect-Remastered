@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
+using MEC;
 using Log = PluginAPI.Core.Log;
 using Random = System.Random;
 
@@ -17,6 +18,27 @@ namespace API
 {
     public static class API
     {
+        public static List<Player>? AllPlayer = new();
+
+        public static Dictionary<string, int> BlockTime { get; set; } = new();
+
+        public static void ClearBlockTime()
+        {
+            BlockTime.Clear();
+        }
+        
+        public static void SetBlockTime(Player player, int value)
+        {
+            BlockTime[player.UserId] = value;
+        }
+        
+        public static int GetPlayerBlockTime(Player player)
+        {
+            return BlockTime.TryGetValue(player.UserId, out int time) ? time : -1;
+        }
+        
+        public static CoroutineHandle BlockTimer { get; set; }
+        
         private static HashSet<ItemType> ammoTypes = new()
         {
             ItemType.Ammo9x19,
@@ -39,6 +61,8 @@ namespace API
                     {
                         EventHandlers.AcceptPlayers.Add(player.UserId);
                     }
+
+                    BlockTime[player.UserId] = 0;
                 }
             }
         }
@@ -261,6 +285,77 @@ namespace API
                 player.AddAmmo(ammoType.GetAmmoType(), PlayerData.Ammo[ammoType]);
             }
             PlayerData.Ammo.Clear();
+        }
+
+        public static void BlockRevive(Player player)
+        {
+            if (GetPlayerBlockTime(player) != -1)
+            {
+                SetBlockTime(player, 10);
+                Log.Debug($"Player {player} has been blocked from revive.");
+            }
+        }
+        
+        public static void DecreaseBlockTime(Player player)
+        {
+            if (GetPlayerBlockTime(player) != 0)
+            {
+                BlockTime[player.UserId] -= 1;
+                Log.Info($"Player {player.Nickname}'s block time has been decreased to {BlockTime[player.UserId]}");
+            }
+        }
+
+        public static void GetAllPlayer()
+        {
+            if (AllPlayer.IsEmpty())
+            {
+                AllPlayer = Player.List.ToList();
+            }
+            else
+            {
+                if (!Player.List.ToList().Equals(AllPlayer))
+                {
+                    AllPlayer = Player.List.ToList();
+                }
+            }
+        }
+        
+        public static void StartCoroutine()
+        {
+            BlockTimer = Timing.RunCoroutine(ReviveCoroutine());
+        }
+        
+        public static void StopCoroutine()
+        {
+            Timing.KillCoroutines(BlockTimer);
+        }
+        
+        public static IEnumerator<float> ReviveCoroutine()
+        {
+            while (true)
+            {
+                GetAllPlayer();
+
+                try
+                {
+                    foreach (Player player in AllPlayer)
+                    {
+                        if (EventHandlers.AcceptPlayers.Contains(player.UserId))
+                        {
+                            if (GetPlayerBlockTime(player) != 0)
+                            {
+                                DecreaseBlockTime(player);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An exception occurred in ReviveCoroutine: {ex.Message} {ex.StackTrace}");
+                }
+            
+                yield return Timing.WaitForSeconds(AutoReconnect.Instance.Config.ReviveBlockDelay);
+            }
         }
     }
 }

@@ -35,6 +35,15 @@ namespace AutoReconnectRemastered
     
         [Description("Text that will be shown to the player at reconnect.")]
         public string ReconnectText { get; set; } = "You have been reconnected. You will be respawn to stored status.";
+        
+        [Description("Whether or not to enable revive block. If true then player won't be revive in the revive block time.")]
+        public bool ReviveBlock { get; set; } = true;
+        
+        [Description("How long the revive will be block.")]
+        public int ReviveBlockTime { get; set; } = 10;
+        
+        [Description("How long the revive timer will delay.")]
+        public float ReviveBlockDelay { get; set; } = 1;
 
         [Description("Text that will be shown to the player who enabled DNT.")]
         public Exiled.API.Features.Broadcast JoinedBroadcast { get; private set; } = new("Plugin requires your auth for storing data. Do you want to accept that ?\nIf accepted you''re able to enjoy reconnect respawn features.\nType .accept in console for accept .deny for deny.", 15);
