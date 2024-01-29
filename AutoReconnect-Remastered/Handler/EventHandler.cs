@@ -52,14 +52,17 @@ namespace AutoReconnectRemastered
             ARRAPI.ClearBlockTime();
         }
 
-        public void OnSpawningRagdolls(SpawningRagdollEventArgs ev) =>
-            ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
+        public void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
 
         public void OnRoundstarted()
         {
             ARRAPI.GetAcceptPlayers();
-            ARRAPI.StartCoroutine();
             Log.Debug("Player list initialized.");
+            
+            if (AutoReconnect.Instance.Config.ReviveBlock)
+            {
+                ARRAPI.StartCoroutine();
+            }
         }
 
         public void OnLeft(LeftEventArgs ev)
@@ -68,7 +71,7 @@ namespace AutoReconnectRemastered
             {
                 if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
                 {
-                    if (ARRAPI.GetPlayerBlockTime(ev.Player) == 0)
+                    if (ARRAPI.GetPlayerBlockTime(ev.Player) == 0 && AutoReconnect.Instance.Config.ReviveBlock)
                     {
                         ARRAPI.AddPlayer(ev.Player);
                         Log.Debug($"Player {ev.Player.Nickname} data stored.");
@@ -114,7 +117,7 @@ namespace AutoReconnectRemastered
 
         public void OnHurt(HurtEventArgs ev)
         {
-            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side)
+            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && AutoReconnect.Instance.Config.ReviveBlock)
             {
                 ARRAPI.BlockRevive(ev.Player);
             }
@@ -122,9 +125,12 @@ namespace AutoReconnectRemastered
 
         public void OnAddingTarget(AddingTargetEventArgs ev)
         {
-            if (AcceptPlayers.Contains(ev.Target.UserId))
+            if (AutoReconnect.Instance.Config.ReviveBlock)
             {
-                ARRAPI.BlockRevive(ev.Target);
+                if (AcceptPlayers.Contains(ev.Target.UserId))
+                {
+                    ARRAPI.BlockRevive(ev.Target);
+                }
             }
         }
 

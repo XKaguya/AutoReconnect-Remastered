@@ -301,7 +301,7 @@ namespace API
             if (GetPlayerBlockTime(player) != 0)
             {
                 BlockTime[player.UserId] -= 1;
-                Log.Info($"Player {player.Nickname}'s block time has been decreased to {BlockTime[player.UserId]}");
+                Log.Debug($"Player {player.Nickname}'s block time has been decreased to {BlockTime[player.UserId]}");
             }
         }
 
