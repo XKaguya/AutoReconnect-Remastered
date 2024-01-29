@@ -291,7 +291,7 @@ namespace API
         {
             if (GetPlayerBlockTime(player) != -1)
             {
-                SetBlockTime(player, 10);
+                SetBlockTime(player, AutoReconnect.Instance.Config.ReviveBlockTime);
                 Log.Debug($"Player {player} has been blocked from revive.");
             }
         }
