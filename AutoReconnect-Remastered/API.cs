@@ -19,23 +19,6 @@ namespace API
     public static class API
     {
         public static List<Player>? AllPlayer = new();
-
-        public static Dictionary<string, int> BlockTime { get; set; } = new();
-
-        public static void ClearBlockTime()
-        {
-            BlockTime.Clear();
-        }
-        
-        public static void SetBlockTime(Player player, int value)
-        {
-            BlockTime[player.UserId] = value;
-        }
-        
-        public static int GetPlayerBlockTime(Player player)
-        {
-            return BlockTime.TryGetValue(player.UserId, out int time) ? time : -1;
-        }
         
         public static CoroutineHandle BlockTimer { get; set; }
         
@@ -62,7 +45,7 @@ namespace API
                         EventHandlers.AcceptPlayers.Add(player.UserId);
                     }
 
-                    BlockTime[player.UserId] = 0;
+                    ReviveBlock.BlockTime[player.UserId] = 0;
                 }
             }
         }
@@ -286,13 +269,27 @@ namespace API
             }
             PlayerData.Ammo.Clear();
         }
+        
+        public static void ClearBlockTime()
+        {
+            ReviveBlock.BlockTime.Clear();
+        }
+        
+        public static void SetBlockTime(Player player, int value)
+        {
+            ReviveBlock.BlockTime[player.UserId] = value;
+        }
+        
+        public static int GetPlayerBlockTime(Player player)
+        {
+            return ReviveBlock.BlockTime.TryGetValue(player.UserId, out int time) ? time : -1;
+        }
 
         public static void BlockRevive(Player player)
         {
             if (GetPlayerBlockTime(player) != -1)
             {
                 SetBlockTime(player, AutoReconnect.Instance.Config.ReviveBlockTime);
-                Log.Debug($"Player {player} has been blocked from revive.");
             }
         }
         
@@ -300,8 +297,7 @@ namespace API
         {
             if (GetPlayerBlockTime(player) != 0)
             {
-                BlockTime[player.UserId] -= 1;
-                Log.Debug($"Player {player.Nickname}'s block time has been decreased to {BlockTime[player.UserId]}");
+                ReviveBlock.BlockTime[player.UserId] -= 1;
             }
         }
 

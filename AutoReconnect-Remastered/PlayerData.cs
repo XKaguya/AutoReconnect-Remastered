@@ -38,6 +38,7 @@ namespace API.Other
         
         public float Energy { get; set; }
     }
+    
     public class EffectList
     {
         public EffectList(EffectType effectType, byte intensity, float duration)
@@ -49,5 +50,10 @@ namespace API.Other
         public EffectType effectType { get; set; }
         public byte Intensity { get; set; }
         public float Duration { get; set; }
+    }
+
+    public static class ReviveBlock
+    {
+        public static Dictionary<string, int> BlockTime { get; set; } = new();
     }
 }
