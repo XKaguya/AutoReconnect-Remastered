@@ -34,7 +34,7 @@
         <HintPath>D:\SLUtils\CommandSystem.Core.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.API">
-        <HintPath>D:\SLUtils\Modified-Exiled\Exiled.API.dll</HintPath>
+        <HintPath>..\..\..\..\SLUtils\Exiled-Reference\Exiled.API.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.CreditTags">
         <HintPath>D:\SLUtils\Exiled-Reference\Exiled.CreditTags.dll</HintPath>
@@ -46,7 +46,7 @@
         <HintPath>D:\SLUtils\Exiled-Reference\Exiled.CustomRoles.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Events">
-        <HintPath>D:\SLUtils\Exiled-Reference\Exiled.Events.dll</HintPath>
+        <HintPath>..\..\..\..\SLUtils\Exiled-Reference\Exiled.Events.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Loader">
         <HintPath>D:\SLUtils\Exiled-Reference\Exiled.Loader.dll</HintPath>

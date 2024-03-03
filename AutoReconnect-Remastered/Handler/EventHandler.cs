@@ -46,16 +46,16 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
         }
 
-        public void OnWaitingForPlayers()
+        private void OnWaitingForPlayers()
         {
             ARRAPI.ClearPlayerData();
             ARRAPI.StopCoroutine();
             ARRAPI.ClearBlockTime();
         }
 
-        public void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
+        private void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
 
-        public void OnRoundstarted()
+        private void OnRoundstarted()
         {
             ARRAPI.GetAcceptPlayers();
             Log.Debug("Player list initialized.");
@@ -66,7 +66,7 @@ namespace AutoReconnectRemastered
             }
         }
 
-        public void OnLeft(LeftEventArgs ev)
+        private void OnLeft(LeftEventArgs ev)
         { 
             if (AcceptPlayers.Contains(ev.Player.UserId))
             {
@@ -91,7 +91,7 @@ namespace AutoReconnectRemastered
             }
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             if (!AcceptPlayers.Contains(ev.Player.UserId))
             {
@@ -103,7 +103,7 @@ namespace AutoReconnectRemastered
             }
         }
 
-        public void OnDying(DyingEventArgs ev)
+        private void OnDying(DyingEventArgs ev)
         {
             if (ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
             {
@@ -116,7 +116,7 @@ namespace AutoReconnectRemastered
             }
         }
 
-        public void OnHurt(HurtEventArgs ev)
+        private void OnHurt(HurtEventArgs ev)
         {
             if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && AutoReconnect.Instance.Config.ReviveBlock)
             {
@@ -124,7 +124,7 @@ namespace AutoReconnectRemastered
             }
         }
 
-        public void OnAddingTarget(AddingTargetEventArgs ev)
+        private void OnAddingTarget(AddingTargetEventArgs ev)
         {
             if (AutoReconnect.Instance.Config.ReviveBlock)
             {
@@ -135,7 +135,7 @@ namespace AutoReconnectRemastered
             }
         }
         
-        public void OnNewObserver(AddingObserverEventArgs ev)
+        private void OnNewObserver(AddingObserverEventArgs ev)
         {
             if (AutoReconnect.Instance.Config.ReviveBlock)
             {
@@ -146,7 +146,7 @@ namespace AutoReconnectRemastered
             }
         }
 
-        public void OnVerified(VerifiedEventArgs ev)
+        private void OnVerified(VerifiedEventArgs ev)
         {
             PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
             if (playerData == null) return;
