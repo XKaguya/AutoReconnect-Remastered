@@ -11,6 +11,9 @@ using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using MEC;
+using Exiled.CustomModules.API.Features;
+using Exiled.CustomModules.API.Features.CustomItems;
+using Exiled.CustomModules.API.Features.CustomRoles;
 using Log = PluginAPI.Core.Log;
 using Random = System.Random;
 
@@ -60,6 +63,16 @@ namespace API
                 PlayerHandler.Level = player.Role.As<Scp079Role>().Level;
                 PlayerHandler.Energy = player.Role.As<Scp079Role>().Energy;
             }
+            
+            var customRole = CustomRole.Get(player);
+            if (customRole != null)
+            {
+                PlayerHandler.CustomRole = customRole;
+            }
+            else
+            {
+                PlayerHandler.CustomRole = null;
+            }
 
             DisconnectedPlayers.Add(player.UserId, PlayerHandler);
 
@@ -99,8 +112,16 @@ namespace API
         {
             if (player == null && playerData == null) return false;
 
-            player.Role.Set(playerData.Class, (SpawnReason)AutoReconnect.Instance.Config.SpawnReason,
-                RoleSpawnFlags.None);
+            if (playerData.CustomRole == null)
+            {
+                player.Role.Set(playerData.Class, (SpawnReason)AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
+            }
+            else
+            {
+                Pawn pawn = new Pawn(player.ReferenceHub);
+                CustomRole.Spawn(pawn, playerData.CustomRole, true);
+            }
+            
             player.Position = playerData.Position;
             player.Health = playerData.Health;
 
@@ -217,9 +238,23 @@ namespace API
                 return;
             }
 
-            foreach (Item item in player.Items.ToHashSet())
+            /*foreach (Item item in player.Items.ToHashSet())
             {
                 PlayerData.Inventory.Add(item.Clone());
+            }*/
+            
+            foreach (Item item in player.Items.ToHashSet())
+            {
+                CustomItem customItem;
+    
+                if (CustomItem.TryGet(item, out customItem))
+                {
+                    PlayerData.CustomItems.Add(customItem);
+                }
+                else
+                {
+                    PlayerData.Inventory.Add(item.Clone());
+                }
             }
         }
 
@@ -232,6 +267,11 @@ namespace API
             }
 
             foreach (Item item in PlayerData.Inventory)
+            {
+                item.Give(player);
+            }
+
+            foreach (CustomItem item in PlayerData.CustomItems)
             {
                 item.Give(player);
             }

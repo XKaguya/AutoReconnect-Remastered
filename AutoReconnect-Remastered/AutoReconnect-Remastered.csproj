@@ -42,6 +42,9 @@
       <Reference Include="Exiled.CustomItems">
         <HintPath>D:\SLUtils\Exiled-Reference\Exiled.CustomItems.dll</HintPath>
       </Reference>
+      <Reference Include="Exiled.CustomModules">
+        <HintPath>..\..\..\..\SLUtils\Exiled-Reference\Exiled.CustomModules.dll</HintPath>
+      </Reference>
       <Reference Include="Exiled.CustomRoles">
         <HintPath>D:\SLUtils\Exiled-Reference\Exiled.CustomRoles.dll</HintPath>
       </Reference>

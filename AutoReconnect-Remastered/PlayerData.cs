@@ -4,6 +4,8 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using PlayerRoles;
 using System.Collections.Generic;
+using Exiled.CustomModules.API.Features.CustomItems;
+using Exiled.CustomModules.API.Features.CustomRoles;
 using UnityEngine;
 
 namespace API.Other
@@ -37,6 +39,10 @@ namespace API.Other
         public int Level { get; set; }
         
         public float Energy { get; set; }
+        
+        public CustomRole? CustomRole { get; set; }
+
+        public List<CustomItem> CustomItems { get; set; } = new();
     }
     
     public class EffectList
