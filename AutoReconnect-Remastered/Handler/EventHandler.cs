@@ -4,7 +4,6 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp096;
-using Exiled.Events.EventArgs.Scp173;
 using PlayerRoles;
 using ARRAPI = API.API;
 
@@ -24,7 +23,6 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
-            Exiled.Events.Handlers.Scp173.AddingObserver += OnNewObserver;
             if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdolls;
@@ -40,7 +38,6 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
-            Exiled.Events.Handlers.Scp173.AddingObserver -= OnNewObserver;
             if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
@@ -125,17 +122,6 @@ namespace AutoReconnectRemastered
         }
 
         private void OnAddingTarget(AddingTargetEventArgs ev)
-        {
-            if (AutoReconnect.Instance.Config.ReviveBlock)
-            {
-                if (AcceptPlayers.Contains(ev.Target.UserId))
-                {
-                    ARRAPI.BlockRevive(ev.Target);
-                }
-            }
-        }
-        
-        private void OnNewObserver(AddingObserverEventArgs ev)
         {
             if (AutoReconnect.Instance.Config.ReviveBlock)
             {
