@@ -243,7 +243,7 @@ namespace API
                 PlayerData.Inventory.Add(item.Clone());
             }*/
             
-            foreach (Item item in player.Items)
+            foreach (Item item in player.Items.ToHashSet())
             {
                 CustomItem customItem;
     
