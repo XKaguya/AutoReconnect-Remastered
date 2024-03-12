@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using API.Other;
 using AutoReconnectRemastered;
 using CustomPlayerEffects;
