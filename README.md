@@ -3,8 +3,7 @@
 </div>
 
 #
-AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. 
-This Plugin allow players who was accidently disconnected from server to spawn what the player was before disconnected.
+AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. This plugin allows players who were accidentally disconnected from the server to spawn as the same character they were before being disconnected.
 
 # How to install
 
