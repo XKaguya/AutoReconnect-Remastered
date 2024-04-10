@@ -8,7 +8,7 @@ using Exiled.CustomModules.API.Features.CustomItems;
 using Exiled.CustomModules.API.Features.CustomRoles;
 using UnityEngine;
 
-namespace API.Other
+namespace API.Features.PlayerData
 {
     public class PlayerData
     {
@@ -49,11 +49,11 @@ namespace API.Other
     {
         public EffectList(EffectType effectType, byte intensity, float duration)
         {
-            this.effectType = effectType;
+            this.EffectType = effectType;
             Intensity = intensity;
             Duration = duration;
         }
-        public EffectType effectType { get; set; }
+        public EffectType EffectType { get; set; }
         public byte Intensity { get; set; }
         public float Duration { get; set; }
     }

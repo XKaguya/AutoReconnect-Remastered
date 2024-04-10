@@ -1,5 +1,5 @@
 ﻿using System;
-using API.Other;
+using API.Features.PlayerData;
 using AutoReconnectRemastered;
 using CustomPlayerEffects;
 using Exiled.API.Extensions;
@@ -14,6 +14,7 @@ using MEC;
 using Exiled.CustomModules.API.Features;
 using Exiled.CustomModules.API.Features.CustomItems;
 using Exiled.CustomModules.API.Features.CustomRoles;
+using UnityEngine;
 using Log = PluginAPI.Core.Log;
 using Random = System.Random;
 
@@ -116,7 +117,7 @@ namespace API
             {
                 player.Role.Set(playerData.Class, (SpawnReason)AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
             }
-            else
+            else if (AutoReconnect.Instance.Config.CustomModuleSupport)
             {
                 Pawn pawn = new Pawn(player.ReferenceHub);
                 CustomRole.Spawn(pawn, playerData.CustomRole, true);
@@ -247,7 +248,7 @@ namespace API
             {
                 CustomItem customItem;
     
-                if (CustomItem.TryGet(item, out customItem))
+                if (CustomItem.TryGet(item, out customItem) && AutoReconnect.Instance.Config.CustomModuleSupport)
                 {
                     PlayerData.CustomItems.Add(customItem);
                 }
@@ -306,7 +307,7 @@ namespace API
 
             foreach (var effectType in PlayerData.Effects)
             {
-                player.EnableEffect(effectType.effectType, effectType.Intensity, effectType.Duration);
+                player.EnableEffect(effectType.EffectType, effectType.Intensity, effectType.Duration);
             }
 
             PlayerData.Effects.Clear();

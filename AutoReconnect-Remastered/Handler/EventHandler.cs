@@ -1,11 +1,13 @@
 using System.Collections.Generic;
-using API.Other;
+using API.Features.PlayerData;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp096;
+using Exiled.Events.EventArgs.Scp173;
 using PlayerRoles;
 using ARRAPI = API.API;
+using Warhead = Exiled.API.Features.Warhead;
 
 namespace AutoReconnectRemastered
 {
@@ -23,6 +25,7 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
+            Exiled.Events.Handlers.Scp173.AddingObserver += OnAddingObserver;
             if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdolls;
@@ -38,6 +41,7 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
+            Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;
             if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
 
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
@@ -102,7 +106,7 @@ namespace AutoReconnectRemastered
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
+            if (ev.DamageHandler.Type == DamageType.Decontamination || ev.DamageHandler.Type == DamageType.Custom || ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
             {
                 ARRAPI.RemovePlayerData(ev.Player);
             }
@@ -132,7 +136,52 @@ namespace AutoReconnectRemastered
             }
         }
 
+        private void OnAddingObserver(AddingObserverEventArgs ev)
+        {
+            if (AutoReconnect.Instance.Config.ReviveBlock)
+            {
+                if (AcceptPlayers.Contains(ev.Target.UserId))
+                {
+                    ARRAPI.BlockRevive(ev.Target);
+                }
+            }
+        }
+        
         private void OnVerified(VerifiedEventArgs ev)
+        {
+            PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
+            if (playerData == null) return;
+    
+            ARRAPI.GetAcceptPlayers();
+
+            if (AutoReconnect.Instance.Config.RespawnEnabled)
+            {
+                if (AutoReconnect.Instance.Config.RetentionTime != 0 && ARRAPI.IsReachedTimeLimit(ev.Player))
+                {
+                    ARRAPI.RemovePlayerData(ev.Player);
+                    return;
+                }
+
+                if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
+                {
+                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    {
+                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                    }
+                }
+                else
+                {
+                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    {
+                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                    }
+                }
+
+                ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+            }
+        }
+        
+        /*private void OnVerified(VerifiedEventArgs ev)
         {
             PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
             if (playerData == null) return;
@@ -194,6 +243,7 @@ namespace AutoReconnectRemastered
                     }
                 }
             }
-        }
+        }*/
+
     }
 }
