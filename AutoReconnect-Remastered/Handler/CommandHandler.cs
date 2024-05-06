@@ -1,4 +1,5 @@
 using System;
+using AutoReconnect_Remastered.API;
 using CommandSystem;
 using Exiled.API.Features;
 
@@ -38,6 +39,23 @@ namespace AutoReconnectRemastered
             
                 Player player = Player.Get(sender);
                 Log.Debug($"Player {player.Nickname} denied.");
+            
+                return true;
+            }
+        }
+
+        public class AutoReconnectReplace : ICommand
+        {
+            public string Command { get; } = "deny";
+            public string[] Aliases { get; } = Array.Empty<string>();
+            public string Description { get; } = "Replace departing player.";
+            
+            public bool Execute(ArraySegment<string> arguments, ICommandSender? sender, out string response)
+            {
+                response = "You have replaced a departing player.";
+            
+                Player player = Player.Get(sender);
+                Features.ReplacePlayer(player);
             
                 return true;
             }

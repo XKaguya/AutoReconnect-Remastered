@@ -7,12 +7,12 @@ namespace AutoReconnectRemastered
     {
         public static AutoReconnect? Instance;
     
-        public override string Author => "RedLeaves & Rysik5318";
+        public override string Author => "Decline & Rysik5318";
         public override string Name => "AutoReconnect-Remastered";
-        public override Version Version => new(1, 1, 5);
-        public override Version RequiredExiledVersion => new(8, 7, 0);
+        public override Version Version => new(1, 1, 7);
+        public override Version RequiredExiledVersion => new(8, 7, 3);
     
-        public EventHandlers EventHandler { get; private set; }
+        public EventHandlers? EventHandler { get; private set; }
     
         public override void OnEnabled()
         {
@@ -32,8 +32,8 @@ namespace AutoReconnectRemastered
 
         public override void OnReloaded()
         {
-            Instance = this;
-            EventHandler = new EventHandlers();
+            Instance = null;
+            EventHandler = null;
         
             base.OnReloaded();
         }

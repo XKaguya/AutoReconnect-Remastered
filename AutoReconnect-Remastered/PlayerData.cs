@@ -4,11 +4,11 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using PlayerRoles;
 using System.Collections.Generic;
-using Exiled.CustomModules.API.Features.CustomItems;
-using Exiled.CustomModules.API.Features.CustomRoles;
+/*using Exiled.CustomModules.API.Features.CustomItems;
+using Exiled.CustomModules.API.Features.CustomRoles;*/
 using UnityEngine;
 
-namespace API.Other
+namespace AutoReconnect_Remastered
 {
     public class PlayerData
     {
@@ -40,20 +40,20 @@ namespace API.Other
         
         public float Energy { get; set; }
         
-        public CustomRole? CustomRole { get; set; }
+        /*public CustomRole? CustomRole { get; set; }
 
-        public List<CustomItem> CustomItems { get; set; } = new();
+        public List<CustomItem> CustomItems { get; set; } = new();*/
     }
     
     public class EffectList
     {
         public EffectList(EffectType effectType, byte intensity, float duration)
         {
-            this.effectType = effectType;
+            this.EffectType = effectType;
             Intensity = intensity;
             Duration = duration;
         }
-        public EffectType effectType { get; set; }
+        public EffectType EffectType { get; set; }
         public byte Intensity { get; set; }
         public float Duration { get; set; }
     }
