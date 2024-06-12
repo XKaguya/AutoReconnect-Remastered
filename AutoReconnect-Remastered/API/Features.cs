@@ -1,12 +1,16 @@
-﻿using System;
+﻿#pragma warning disable CS1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoReconnectRemastered;
+using Event;
 using Exiled.API.Features;
 using MEC;
+using PlayerInfo;
 using PlayerRoles;
+using Plugin;
 
-namespace AutoReconnect_Remastered.API
+namespace API
 {
     public class Features
     {
@@ -16,7 +20,7 @@ namespace AutoReconnect_Remastered.API
         {
             if (GetPlayerBlockTime(player) != -1)
             {
-                SetBlockTime(player, AutoReconnect.Instance.Config.ReviveBlockTime);
+                SetBlockTime(player, PluginBase.Instance.Config.ReviveBlockTime);
             }
         }
 
@@ -35,11 +39,11 @@ namespace AutoReconnect_Remastered.API
 
         public static bool IsReachedTimeLimit(Player player)
         {
-            PlayerData? PlayerData = PlayerApi.GetPlayerData(player);
+            PlayerData? playerData = PlayerApi.GetPlayerData(player);
 
             var time = DateTime.Now;
-            TimeSpan RetentionTimeSpan = TimeSpan.FromSeconds(AutoReconnect.Instance.Config.RetentionTime);
-            if ((time - PlayerData.Time) > RetentionTimeSpan)
+            TimeSpan retentionTimeSpan = TimeSpan.FromSeconds(PluginBase.Instance!.Config.RetentionTime);
+            if ((time - playerData!.Time) > retentionTimeSpan)
             {
                 return true;
             }
@@ -49,9 +53,9 @@ namespace AutoReconnect_Remastered.API
 
         public static void RandomSpec(Player player)
         {
-            PlayerData? PlayerData = PlayerApi.GetPlayerData(player);
+            PlayerData? playerData = PlayerApi.GetPlayerData(player);
 
-            if (PlayerData == null)
+            if (playerData == null)
             {
                 return;
             }
@@ -65,12 +69,12 @@ namespace AutoReconnect_Remastered.API
 
             Log.Debug($"Choosen player: {selectedPlayer}");
 
-            PlayerApi.ResurrectPlayer(selectedPlayer, PlayerData);
+            PlayerApi.ResurrectPlayer(selectedPlayer, playerData);
 
-            var message = string.Format(AutoReconnect.Instance.Config.DisconnectedMessage, PlayerData.Class,
+            var message = string.Format(PluginBase.Instance!.Config.DisconnectedMessage, playerData.Class,
                 player.Nickname);
 
-            if (AutoReconnect.Instance.Config.DisconnectedMessageType == 1)
+            if (PluginBase.Instance.Config.DisconnectedMessageType == 1)
             {
                 foreach (var player1 in Player.List)
                 {
@@ -78,7 +82,7 @@ namespace AutoReconnect_Remastered.API
                 }
             }
 
-            if (AutoReconnect.Instance.Config.DisconnectedMessageType == 2)
+            if (PluginBase.Instance.Config.DisconnectedMessageType == 2)
             {
                 var alivePlayers = Player.List.Where(player => player.Role.IsAlive);
                 foreach (var player1 in alivePlayers)
@@ -109,14 +113,14 @@ namespace AutoReconnect_Remastered.API
                 }
             }
 
-            if (player.Role == RoleTypeId.Spectator && AutoReconnect.Instance.Config.ReplacePlayer)
+            if (player.Role == RoleTypeId.Spectator && PluginBase.Instance!.Config.ReplacePlayer)
             {
-                PlayerApi.ResurrectPlayer(player, pd);
+                PlayerApi.ResurrectPlayer(player, pd!);
             }
 
-            var message = string.Format(AutoReconnect.Instance.Config.DisconnectedMessage, pd.Class, player.Nickname);
+            var message = string.Format(PluginBase.Instance!.Config.DisconnectedMessage, pd!.Class, player.Nickname);
 
-            if (AutoReconnect.Instance.Config.DisconnectedMessageType == 1)
+            if (PluginBase.Instance.Config.DisconnectedMessageType == 1)
             {
                 foreach (var player1 in Player.List)
                 {
@@ -124,18 +128,21 @@ namespace AutoReconnect_Remastered.API
                 }
             }
 
-            if (AutoReconnect.Instance.Config.DisconnectedMessageType == 2)
+            if (PluginBase.Instance.Config.DisconnectedMessageType == 2)
             {
-                var alivePlayers = Player.List.Where(player => player.Role.IsAlive);
-                foreach (var player1 in alivePlayers)
+                var players = Player.List;
+
+                var alivePlayers = players.Where(PlayerApi.IsPlayerAlive);
+                var deadPlayers = players.Where(PlayerApi.IsPlayerDead);
+
+                foreach (var alivePlayer in alivePlayers)
                 {
-                    player1.ShowHint(message);
+                    alivePlayer.ShowHint(message);
                 }
 
-                var deadPlayers = Player.List.Where(player => !player.Role.IsAlive);
-                foreach (var player2 in deadPlayers)
+                foreach (var deadPlayer in deadPlayers)
                 {
-                    player2.Broadcast(10, message, Broadcast.BroadcastFlags.Normal, true);
+                    deadPlayer.Broadcast(10, message, Broadcast.BroadcastFlags.Normal, true);
                 }
             }
 
@@ -177,7 +184,7 @@ namespace AutoReconnect_Remastered.API
                     Log.Error($"An exception occurred in ReviveCoroutine: {ex.Message} {ex.StackTrace}");
                 }
 
-                yield return Timing.WaitForSeconds(AutoReconnect.Instance.Config.ReviveBlockDelay);
+                yield return Timing.WaitForSeconds(PluginBase.Instance.Config.ReviveBlockDelay);
             }
         }
 

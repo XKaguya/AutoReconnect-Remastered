@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Extensions;
+#pragma warning disable CS1591
 
-namespace AutoReconnect_Remastered.API
+using PlayerInfo;
+
+namespace API
 {
     public class Ammo
     {
@@ -16,24 +19,24 @@ namespace AutoReconnect_Remastered.API
         
         public static void RestoreAmmo(Exiled.API.Features.Player player)
         {
-            PlayerData? PlayerData = PlayerApi.GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Ammo.Count == 0)
+            PlayerData? playerData = PlayerApi.GetPlayerData(player);
+            if (playerData == null || playerData.Ammo.Count == 0)
             {
                 return;
             }
     
-            foreach (var ammoType in PlayerData.Ammo.Keys)
+            foreach (var ammoType in playerData.Ammo.Keys)
             {
-                player.AddAmmo(ammoType.GetAmmoType(), PlayerData.Ammo[ammoType]);
+                player.AddAmmo(ammoType.GetAmmoType(), playerData.Ammo[ammoType]);
             }
     
-            PlayerData.Ammo.Clear();
+            playerData.Ammo.Clear();
         }
         
         public static void StoreAmmo(Exiled.API.Features.Player player)
         {
-            PlayerData? PlayerData = PlayerApi.GetPlayerData(player);
-            if (PlayerData == null || player.Ammo.Count == 0)
+            PlayerData? playerData = PlayerApi.GetPlayerData(player);
+            if (playerData == null || player.Ammo.Count == 0)
             {
                 return;
             }
@@ -42,7 +45,7 @@ namespace AutoReconnect_Remastered.API
             {
                 if (player.Ammo.TryGetValue(ammoType, out ushort ammoAmount))
                 {
-                    PlayerData.Ammo[ammoType] = ammoAmount;
+                    playerData.Ammo[ammoType] = ammoAmount;
                 }
             }
         }

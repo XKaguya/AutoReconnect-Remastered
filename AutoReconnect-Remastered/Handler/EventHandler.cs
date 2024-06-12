@@ -1,15 +1,18 @@
+#pragma warning disable CS1591
+
 using System.Collections.Generic;
-using AutoReconnect_Remastered;
-using AutoReconnect_Remastered.API;
+using API;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp096;
-using Exiled.Events.EventArgs.Scp173;
+using PlayerInfo;
+// using Exiled.Events.EventArgs.Scp173;
 using PlayerRoles;
+using Plugin;
 using Warhead = Exiled.API.Features.Warhead;
 
-namespace AutoReconnectRemastered
+namespace Event
 {
     public class EventHandlers
     {
@@ -27,7 +30,7 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
             /*Exiled.Events.Handlers.Scp173.AddingObserver += OnAddingObserver;*/
             
-            if (AutoReconnect.Instance.Config.SpawnRagdoll)
+            if (PluginBase.Instance!.Config.SpawnRagdoll)
             {
                 return;
             }
@@ -47,7 +50,7 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
             /*Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;*/
             
-            if (AutoReconnect.Instance.Config.SpawnRagdoll)
+            if (PluginBase.Instance!.Config.SpawnRagdoll)
             {
                 return;
             }
@@ -69,7 +72,7 @@ namespace AutoReconnectRemastered
             PlayerApi.GetAcceptPlayers();
             Log.Debug("Player list initialized.");
             
-            if (AutoReconnect.Instance.Config.ReviveBlock)
+            if (PluginBase.Instance!.Config.ReviveBlock)
             {
                 Features.StartCoroutine();
             }
@@ -81,12 +84,12 @@ namespace AutoReconnectRemastered
             {
                 if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
                 {
-                    if (Features.GetPlayerBlockTime(ev.Player) == 0 && AutoReconnect.Instance.Config.ReviveBlock)
+                    if (Features.GetPlayerBlockTime(ev.Player) == 0 && PluginBase.Instance!.Config.ReviveBlock)
                     {
                         PlayerApi.AddPlayer(ev.Player);
                         Log.Debug($"Player {ev.Player.Nickname} data stored.");
 
-                        if (AutoReconnect.Instance.Config.RandomSpec)
+                        if (PluginBase.Instance.Config.RandomSpec)
                         {
                             if (ev.Player.Role.Team == Team.SCPs)
                             {
@@ -107,7 +110,7 @@ namespace AutoReconnectRemastered
                 if (ev.Player.DoNotTrack)
                 {
                     Log.Debug($"Player {ev.Player.Nickname} has DNT on.");
-                    ev.Player.Broadcast(AutoReconnect.Instance?.Config.JoinedBroadcast);
+                    ev.Player.Broadcast(PluginBase.Instance?.Config.JoinedBroadcast);
                 }
             }
         }
@@ -127,7 +130,7 @@ namespace AutoReconnectRemastered
 
         private void OnHurt(HurtEventArgs ev)
         {
-            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && AutoReconnect.Instance.Config.ReviveBlock)
+            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && PluginBase.Instance!.Config.ReviveBlock)
             {
                 Features.BlockRevive(ev.Player);
             }
@@ -135,7 +138,7 @@ namespace AutoReconnectRemastered
 
         private void OnAddingTarget(AddingTargetEventArgs ev)
         {
-            if (AutoReconnect.Instance.Config.ReviveBlock)
+            if (PluginBase.Instance!.Config.ReviveBlock)
             {
                 if (AcceptPlayers.Contains(ev.Target.UserId))
                 {
@@ -164,9 +167,9 @@ namespace AutoReconnectRemastered
     
             PlayerApi.GetAcceptPlayers();
 
-            if (AutoReconnect.Instance.Config.RespawnEnabled)
+            if (PluginBase.Instance!.Config.RespawnEnabled)
             {
-                if (AutoReconnect.Instance.Config.RetentionTime != 0 && Features.IsReachedTimeLimit(ev.Player))
+                if (PluginBase.Instance.Config.RetentionTime != 0 && Features.IsReachedTimeLimit(ev.Player))
                 {
                     PlayerApi.RemovePlayerData(ev.Player);
                     return;
@@ -176,14 +179,14 @@ namespace AutoReconnectRemastered
                 {
                     if (PlayerApi.ResurrectPlayer(ev.Player, playerData))
                     {
-                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        ev.Player.Broadcast(5, PluginBase.Instance!.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
                     }
                 }
                 else
                 {
                     if (PlayerApi.ResurrectPlayer(ev.Player, playerData))
                     {
-                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        ev.Player.Broadcast(5, PluginBase.Instance!.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
                     }
                 }
 

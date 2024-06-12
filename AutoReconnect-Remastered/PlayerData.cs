@@ -1,3 +1,5 @@
+#pragma warning disable CS1591
+
 using System;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -8,7 +10,7 @@ using System.Collections.Generic;
 using Exiled.CustomModules.API.Features.CustomRoles;*/
 using UnityEngine;
 
-namespace AutoReconnect_Remastered
+namespace PlayerInfo
 {
     public class PlayerData
     {

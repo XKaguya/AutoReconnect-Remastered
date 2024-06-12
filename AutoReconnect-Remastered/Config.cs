@@ -1,8 +1,10 @@
+#pragma warning disable CS1591
+
 using System.ComponentModel;
 using Exiled.API.Interfaces;
 using PlayerRoles;
 
-namespace AutoReconnectRemastered
+namespace Configurations
 {
     public class Config : IConfig
     {

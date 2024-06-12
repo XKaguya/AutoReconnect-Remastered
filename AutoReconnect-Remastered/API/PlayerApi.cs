@@ -1,17 +1,21 @@
-﻿using System;
+﻿#pragma warning disable CS1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoReconnectRemastered;
+using Event;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
+using PlayerInfo;
 // using Exiled.CustomModules.API.Features;
 // using Exiled.CustomModules.API.Features.CustomItems;
 // using Exiled.CustomModules.API.Features.CustomRoles;
 using PlayerRoles;
+using Plugin;
 
-namespace AutoReconnect_Remastered.API
+namespace API
 {
     public class PlayerApi
     {
@@ -54,7 +58,7 @@ namespace AutoReconnect_Remastered.API
 
             DisconnectedPlayers.Add(player.UserId, PlayerHandler);
 
-            CallSto(player, AutoReconnect.Instance.Config.RecoveryInventory, AutoReconnect.Instance.Config.RecoveryAmmo, AutoReconnect.Instance.Config.RecoveryEffect);
+            CallSto(player, PluginBase.Instance.Config.RecoveryInventory, PluginBase.Instance.Config.RecoveryAmmo, PluginBase.Instance.Config.RecoveryEffect);
         }
 
         private static void CallRec(Player player, bool recInv, bool recAmmo, bool recEff)
@@ -163,7 +167,7 @@ namespace AutoReconnect_Remastered.API
         {
             if (player == null && playerData == null) return false;
         
-            player.Role.Set(playerData.Class, (SpawnReason)AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
+            player.Role.Set(playerData.Class, (SpawnReason)PluginBase.Instance.Config.SpawnReason, RoleSpawnFlags.None);
 
             /*if (playerData.CustomRole == null)
             {
@@ -178,7 +182,7 @@ namespace AutoReconnect_Remastered.API
             player.Position = playerData.Position;
             player.Health = playerData.Health;
 
-            CallRec(player, AutoReconnect.Instance.Config.RecoveryInventory, AutoReconnect.Instance.Config.RecoveryAmmo, AutoReconnect.Instance.Config.RecoveryEffect);
+            CallRec(player, PluginBase.Instance.Config.RecoveryInventory, PluginBase.Instance.Config.RecoveryAmmo, PluginBase.Instance.Config.RecoveryEffect);
 
             if (playerData.Class == RoleTypeId.Scp079)
             {
@@ -216,6 +220,16 @@ namespace AutoReconnect_Remastered.API
             }*/
 
             PlayerData.Inventory.Clear();
+        }
+        
+        public static bool IsPlayerAlive(Player player)
+        {
+            return player.Role.IsAlive;
+        }
+
+        public static bool IsPlayerDead(Player player)
+        {
+            return !player.Role.IsAlive;
         }
     }
 }

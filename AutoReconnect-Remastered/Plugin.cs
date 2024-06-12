@@ -1,15 +1,19 @@
+#pragma warning disable CS1591
+
 using System;
+using Configurations;
+using Event;
 using Exiled.API.Features;
 
-namespace AutoReconnectRemastered
+namespace Plugin
 {
-    public class AutoReconnect : Plugin<Config>
+    public class PluginBase : Plugin<Config>
     {
-        public static AutoReconnect? Instance;
+        public static PluginBase? Instance;
     
         public override string Author => "Decline & Rysik5318";
         public override string Name => "AutoReconnect-Remastered";
-        public override Version Version => new(1, 1, 7);
+        public override Version Version => new(1, 1, 8);
         public override Version RequiredExiledVersion => new(8, 7, 3);
     
         public EventHandlers? EventHandler { get; private set; }
