@@ -47,11 +47,6 @@ See:
   <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/DNT%20Hint.png">
 </div>
 
-# ToDo
-```
-Custom Role/Item support. (Exiled 9)
-```
-
 # Configuration
 
 ```
