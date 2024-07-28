@@ -62,7 +62,7 @@ namespace Configurations
         [Description("Whether or not to enable .rp command. This command allows player to replace a disconnected scp.")]
         public bool ReplacePlayer { get; set; } = true;
         
-        /*[Description("Whether or not to enable custom moudle support. Default is true.")]
-        public bool CustomModuleSupport { get; set; } = true;*/
+        [Description("Whether or not to enable custom moudle support. Default is true.")]
+        public bool CustomModuleSupport { get; set; } = true;
     }
 }

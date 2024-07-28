@@ -6,8 +6,8 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using PlayerRoles;
 using System.Collections.Generic;
-/*using Exiled.CustomModules.API.Features.CustomItems;
-using Exiled.CustomModules.API.Features.CustomRoles;*/
+using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.API.Features;
 using UnityEngine;
 
 namespace PlayerInfo
@@ -23,8 +23,14 @@ namespace PlayerInfo
         public Vector3 Position { get; set; }
 
         public RoleTypeId Class { get; set; }
+        
+        public float Stamina { get; set; }
+        
+        public Vector3 Scale { get; set; }
 
         public float Health { get; set; }
+        
+        public float MaxHealth { get; set; }
 
         public HashSet<Item> Inventory { get; set; }
 
@@ -42,9 +48,11 @@ namespace PlayerInfo
         
         public float Energy { get; set; }
         
-        /*public CustomRole? CustomRole { get; set; }
+        public CustomRole? CustomRole { get; set; }
+        
+        public Type? CustomRoleType { get; set; }
 
-        public List<CustomItem> CustomItems { get; set; } = new();*/
+        public List<CustomItem> CustomItems { get; set; } = new();
     }
     
     public class EffectList

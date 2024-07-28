@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Extensions;
-#pragma warning disable CS1591
+﻿#pragma warning disable CS1591
 
+using System.Collections.Generic;
+using Exiled.API.Extensions;
 using PlayerInfo;
 
 namespace API
 {
     public class Ammo
     {
-        private static HashSet<ItemType> _ammoTypes = new()
+        private static readonly HashSet<ItemType> AmmoTypes = new()
         {
             ItemType.Ammo9x19,
             ItemType.Ammo556x45,
@@ -41,7 +41,7 @@ namespace API
                 return;
             }
     
-            foreach (ItemType ammoType in _ammoTypes)
+            foreach (ItemType ammoType in AmmoTypes)
             {
                 if (player.Ammo.TryGetValue(ammoType, out ushort ammoAmount))
                 {

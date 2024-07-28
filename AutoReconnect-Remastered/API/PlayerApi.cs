@@ -8,10 +8,10 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
+using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.API;
+using Exiled.CustomRoles.API.Features;
 using PlayerInfo;
-// using Exiled.CustomModules.API.Features;
-// using Exiled.CustomModules.API.Features.CustomItems;
-// using Exiled.CustomModules.API.Features.CustomRoles;
 using PlayerRoles;
 using Plugin;
 
@@ -30,6 +30,7 @@ namespace API
             {
                 Ammo = new Dictionary<ItemType, ushort>(),
                 Class = player.Role.Type,
+                MaxHealth = player.MaxHealth,
                 Health = player.Health,
                 Inventory = new HashSet<Item>(),
                 Name = player.Nickname,
@@ -37,6 +38,8 @@ namespace API
                 Effects = new(),
                 Player = player,
                 Time = DateTime.Now,
+                Stamina = player.Stamina,
+                Scale = player.Scale,
             };
 
             if (player.Role.Type == RoleTypeId.Scp079)
@@ -45,16 +48,25 @@ namespace API
                 PlayerHandler.Level = player.Role.As<Scp079Role>().Level;
                 PlayerHandler.Energy = player.Role.As<Scp079Role>().Energy;
             }
-            
-            /*var customRole = CustomRole.Get(player);
-            if (customRole != null)
+
+            var customRoles = player.GetCustomRoles();
+            if (customRoles.Any())
             {
-                PlayerHandler.CustomRole = customRole;
+                foreach (CustomRole customRole in CustomRole.Registered)
+                {
+                    if (customRoles.Contains(customRole))
+                    {
+                        // Only accept one custom role. Won't consider as a bug if multiple.
+                        PlayerHandler.CustomRole = customRole;
+                        PlayerHandler.CustomRoleType = customRole.GetType();
+                        break;
+                    }
+                }
             }
             else
             {
                 PlayerHandler.CustomRole = null;
-            }*/
+            }
 
             DisconnectedPlayers.Add(player.UserId, PlayerHandler);
 
@@ -106,25 +118,25 @@ namespace API
             {
                 return;
             }
-        
+            
             foreach (Item item in player.Items.ToHashSet())
             {
-                PlayerData.Inventory.Add(item.Clone());
+                try
+                {
+                    if (CustomItem.TryGet(item, out CustomItem customItem) && PluginBase.Instance.Config.CustomModuleSupport)
+                    {
+                        PlayerData.CustomItems.Add(customItem);
+                    }
+                    else
+                    {
+                        PlayerData.Inventory.Add(item.Clone());
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.Message + e.StackTrace);
+                }
             }
-            
-            /*foreach (Item item in player.Items.ToHashSet())
-            {
-                CustomItem customItem;
-    
-                if (CustomItem.TryGet(item, out customItem) && AutoReconnect.Instance.Config.CustomModuleSupport)
-                {
-                    PlayerData.CustomItems.Add(customItem);
-                }
-                else
-                {
-                    PlayerData.Inventory.Add(item.Clone());
-                }
-            }*/
         }
 
         public static void GetAcceptPlayers()
@@ -144,21 +156,6 @@ namespace API
             }
         }
 
-        private static void GetAllPlayer()
-        {
-            if (AllPlayers.IsEmpty())
-            {
-                AllPlayers = Player.List.ToList();
-            }
-            else
-            {
-                if (!Player.List.ToList().Equals(AllPlayers))
-                {
-                    AllPlayers = Player.List.ToList();
-                }
-            }
-        }
-
         public static PlayerData? GetPlayerData(Player player) => DisconnectedPlayers.ContainsKey(player.UserId)
             ? DisconnectedPlayers[player.UserId]
             : null;
@@ -169,18 +166,20 @@ namespace API
         
             player.Role.Set(playerData.Class, (SpawnReason)PluginBase.Instance.Config.SpawnReason, RoleSpawnFlags.None);
 
-            /*if (playerData.CustomRole == null)
+            if (playerData.CustomRole == null)
             {
-                player.Role.Set(playerData.Class, (SpawnReason)AutoReconnect.Instance.Config.SpawnReason, RoleSpawnFlags.None);
+                player.Role.Set(playerData.Class, (SpawnReason)PluginBase.Instance.Config.SpawnReason, RoleSpawnFlags.None);
             }
-            else if (AutoReconnect.Instance.Config.CustomModuleSupport)
+            else if (playerData.CustomRole != null && playerData.CustomRoleType != null && PluginBase.Instance.Config.CustomModuleSupport)
             {
-                Pawn pawn = new Pawn(player.ReferenceHub);
-                CustomRole.Spawn(pawn, playerData.CustomRole, true);
-            }*/
+                CustomRole.Get(playerData.CustomRoleType)?.AddRole(player);
+            }
             
             player.Position = playerData.Position;
+            player.MaxHealth = playerData.MaxHealth;
             player.Health = playerData.Health;
+            player.Scale = playerData.Scale;
+            player.Stamina = playerData.Stamina;
 
             CallRec(player, PluginBase.Instance.Config.RecoveryInventory, PluginBase.Instance.Config.RecoveryAmmo, PluginBase.Instance.Config.RecoveryEffect);
 
@@ -214,10 +213,10 @@ namespace API
                 item.Give(player);
             }
 
-            /*foreach (CustomItem item in PlayerData.CustomItems)
+            foreach (CustomItem item in PlayerData.CustomItems)
             {
                 item.Give(player);
-            }*/
+            }
 
             PlayerData.Inventory.Clear();
         }
