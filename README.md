@@ -27,10 +27,14 @@ The player will have same HP, same Inventory, same Ammo and etc.
 ```
 Restore player's Role.
 Restore player's HP.
+Restore player's Scale.
+Restore player's Stamina.
 Restore player's Ammo.
 Restore player's Inventory.
 Restore player's Effect with Intensity and Duration.
 Replace disconnected Scp player to a random spectator player.
+
+And also supports for CustomRoles/CustomItems (Not the CustomModule).
 ```
 
 Full Auto plugin. No need do anything else than install.
