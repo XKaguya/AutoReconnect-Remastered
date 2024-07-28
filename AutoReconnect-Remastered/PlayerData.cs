@@ -1,14 +1,16 @@
+#pragma warning disable CS1591
+
 using System;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using PlayerRoles;
 using System.Collections.Generic;
-using Exiled.CustomModules.API.Features.CustomItems;
-using Exiled.CustomModules.API.Features.CustomRoles;
+using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.API.Features;
 using UnityEngine;
 
-namespace API.Features.PlayerData
+namespace PlayerInfo
 {
     public class PlayerData
     {
@@ -21,8 +23,14 @@ namespace API.Features.PlayerData
         public Vector3 Position { get; set; }
 
         public RoleTypeId Class { get; set; }
+        
+        public float Stamina { get; set; }
+        
+        public Vector3 Scale { get; set; }
 
         public float Health { get; set; }
+        
+        public float MaxHealth { get; set; }
 
         public HashSet<Item> Inventory { get; set; }
 
@@ -41,6 +49,8 @@ namespace API.Features.PlayerData
         public float Energy { get; set; }
         
         public CustomRole? CustomRole { get; set; }
+        
+        public Type? CustomRoleType { get; set; }
 
         public List<CustomItem> CustomItems { get; set; } = new();
     }

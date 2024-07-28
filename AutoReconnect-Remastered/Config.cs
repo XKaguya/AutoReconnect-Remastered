@@ -1,8 +1,10 @@
+#pragma warning disable CS1591
+
 using System.ComponentModel;
 using Exiled.API.Interfaces;
 using PlayerRoles;
 
-namespace AutoReconnectRemastered
+namespace Configurations
 {
     public class Config : IConfig
     {
@@ -56,6 +58,9 @@ namespace AutoReconnectRemastered
         
         [Description("The information used for other plugins to avoid conflicts. Set to default if you have no conflict.")]
         public RoleChangeReason SpawnReason { get; set; } = RoleChangeReason.RemoteAdmin;
+        
+        [Description("Whether or not to enable .rp command. This command allows player to replace a disconnected scp.")]
+        public bool ReplacePlayer { get; set; } = true;
         
         [Description("Whether or not to enable custom moudle support. Default is true.")]
         public bool CustomModuleSupport { get; set; } = true;

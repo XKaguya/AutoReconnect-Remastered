@@ -1,15 +1,18 @@
+#pragma warning disable CS1591
+
 using System.Collections.Generic;
-using API.Features.PlayerData;
+using API;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp096;
-using Exiled.Events.EventArgs.Scp173;
+using PlayerInfo;
+// using Exiled.Events.EventArgs.Scp173;
 using PlayerRoles;
-using ARRAPI = API.API;
+using Plugin;
 using Warhead = Exiled.API.Features.Warhead;
 
-namespace AutoReconnectRemastered
+namespace Event
 {
     public class EventHandlers
     {
@@ -25,8 +28,12 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
-            Exiled.Events.Handlers.Scp173.AddingObserver += OnAddingObserver;
-            if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
+            /*Exiled.Events.Handlers.Scp173.AddingObserver += OnAddingObserver;*/
+            
+            if (PluginBase.Instance!.Config.SpawnRagdoll)
+            {
+                return;
+            }
 
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdolls;
         }
@@ -41,29 +48,33 @@ namespace AutoReconnectRemastered
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundstarted;
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
-            Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;
-            if (AutoReconnect.Instance.Config.SpawnRagdoll) return;
+            /*Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;*/
+            
+            if (PluginBase.Instance!.Config.SpawnRagdoll)
+            {
+                return;
+            }
 
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdolls;
         }
 
         private void OnWaitingForPlayers()
         {
-            ARRAPI.ClearPlayerData();
-            ARRAPI.StopCoroutine();
-            ARRAPI.ClearBlockTime();
+            PlayerApi.ClearPlayerData();
+            Features.StopCoroutine();
+            Features.ClearBlockTime();
         }
 
-        private void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = ARRAPI.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
+        private void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = PlayerApi.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
 
         private void OnRoundstarted()
         {
-            ARRAPI.GetAcceptPlayers();
+            PlayerApi.GetAcceptPlayers();
             Log.Debug("Player list initialized.");
             
-            if (AutoReconnect.Instance.Config.ReviveBlock)
+            if (PluginBase.Instance!.Config.ReviveBlock)
             {
-                ARRAPI.StartCoroutine();
+                Features.StartCoroutine();
             }
         }
 
@@ -73,16 +84,16 @@ namespace AutoReconnectRemastered
             {
                 if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
                 {
-                    if (ARRAPI.GetPlayerBlockTime(ev.Player) == 0 && AutoReconnect.Instance.Config.ReviveBlock)
+                    if (Features.GetPlayerBlockTime(ev.Player) == 0 && PluginBase.Instance!.Config.ReviveBlock)
                     {
-                        ARRAPI.AddPlayer(ev.Player);
+                        PlayerApi.AddPlayer(ev.Player);
                         Log.Debug($"Player {ev.Player.Nickname} data stored.");
 
-                        if (AutoReconnect.Instance.Config.RandomSpec)
+                        if (PluginBase.Instance.Config.RandomSpec)
                         {
                             if (ev.Player.Role.Team == Team.SCPs)
                             {
-                                ARRAPI.RandomSpec(ev.Player);
+                                Features.RandomSpec(ev.Player);
                                 Log.Debug("Random Spectator method executed.");
                             }
                         }
@@ -99,7 +110,7 @@ namespace AutoReconnectRemastered
                 if (ev.Player.DoNotTrack)
                 {
                     Log.Debug($"Player {ev.Player.Nickname} has DNT on.");
-                    ev.Player.Broadcast(AutoReconnect.Instance?.Config.JoinedBroadcast);
+                    ev.Player.Broadcast(PluginBase.Instance?.Config.JoinedBroadcast);
                 }
             }
         }
@@ -108,142 +119,79 @@ namespace AutoReconnectRemastered
         {
             if (ev.DamageHandler.Type == DamageType.Decontamination || ev.DamageHandler.Type == DamageType.Custom || ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
             {
-                ARRAPI.RemovePlayerData(ev.Player);
+                PlayerApi.RemovePlayerData(ev.Player);
             }
             else
             {
                 if (ev.Attacker == null) return;
-                ARRAPI.RemovePlayerData(ev.Player);
+                PlayerApi.RemovePlayerData(ev.Player);
             }
         }
 
         private void OnHurt(HurtEventArgs ev)
         {
-            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && AutoReconnect.Instance.Config.ReviveBlock)
+            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && PluginBase.Instance!.Config.ReviveBlock)
             {
-                ARRAPI.BlockRevive(ev.Player);
+                Features.BlockRevive(ev.Player);
             }
         }
 
         private void OnAddingTarget(AddingTargetEventArgs ev)
         {
-            if (AutoReconnect.Instance.Config.ReviveBlock)
+            if (PluginBase.Instance!.Config.ReviveBlock)
             {
                 if (AcceptPlayers.Contains(ev.Target.UserId))
                 {
-                    ARRAPI.BlockRevive(ev.Target);
+                    Features.BlockRevive(ev.Target);
                 }
             }
         }
 
+        /*
         private void OnAddingObserver(AddingObserverEventArgs ev)
         {
             if (AutoReconnect.Instance.Config.ReviveBlock)
             {
                 if (AcceptPlayers.Contains(ev.Target.UserId))
                 {
-                    ARRAPI.BlockRevive(ev.Target);
+                    Features.BlockRevive(ev.Target);
                 }
             }
         }
+        */
         
         private void OnVerified(VerifiedEventArgs ev)
         {
-            PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
+            PlayerData? playerData = PlayerApi.GetPlayerData(ev.Player);
             if (playerData == null) return;
     
-            ARRAPI.GetAcceptPlayers();
+            PlayerApi.GetAcceptPlayers();
 
-            if (AutoReconnect.Instance.Config.RespawnEnabled)
+            if (PluginBase.Instance!.Config.RespawnEnabled)
             {
-                if (AutoReconnect.Instance.Config.RetentionTime != 0 && ARRAPI.IsReachedTimeLimit(ev.Player))
+                if (PluginBase.Instance.Config.RetentionTime != 0 && Features.IsReachedTimeLimit(ev.Player))
                 {
-                    ARRAPI.RemovePlayerData(ev.Player);
+                    PlayerApi.RemovePlayerData(ev.Player);
                     return;
                 }
 
                 if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
                 {
-                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    if (PlayerApi.ResurrectPlayer(ev.Player, playerData))
                     {
-                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        ev.Player.Broadcast(5, PluginBase.Instance!.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
                     }
                 }
                 else
                 {
-                    if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
+                    if (PlayerApi.ResurrectPlayer(ev.Player, playerData))
                     {
-                        ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
+                        ev.Player.Broadcast(5, PluginBase.Instance!.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
                     }
                 }
 
-                ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
+                PlayerApi.DisconnectedPlayers?.Remove(ev.Player.UserId);
             }
         }
-        
-        /*private void OnVerified(VerifiedEventArgs ev)
-        {
-            PlayerData playerData = ARRAPI.GetPlayerData(ev.Player);
-            if (playerData == null) return;
-            
-            ARRAPI.GetAcceptPlayers();
-
-            if (AutoReconnect.Instance.Config.RespawnEnabled)
-            {
-                if (AutoReconnect.Instance.Config.RetentionTime == 0)
-                {
-                    if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
-                    {
-                        if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
-                        {
-                            ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
-                        }
-
-                        ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
-                    }
-                    else
-                    {
-                        if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
-                        {
-                            ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
-                        }
-
-                        ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
-                    }
-
-                }
-                else
-                {
-                    if (!ARRAPI.IsReachedTimeLimit(ev.Player))
-                    {
-                        if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
-                        {
-                            if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
-                            {
-                                ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText,
-                                    Broadcast.BroadcastFlags.Normal, true);
-                            }
-
-                            ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
-                        }
-                        else
-                        {
-                            if (ARRAPI.ResurrectPlayer(ev.Player, playerData))
-                            {
-                                ev.Player.Broadcast(5, AutoReconnect.Instance?.Config.ReconnectText,
-                                    Broadcast.BroadcastFlags.Normal, true);
-                            }
-
-                            ARRAPI.DisconnectedPlayers?.Remove(ev.Player.UserId);
-                        }
-                    }
-                    else
-                    {
-                        ARRAPI.RemovePlayerData(ev.Player);
-                    }
-                }
-            }
-        }*/
-
     }
 }
