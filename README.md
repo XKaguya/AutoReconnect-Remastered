@@ -2,16 +2,19 @@
   <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/AutoReconnect-Remastered.png">
 </div>
 
-![Downloads](https://img.shields.io/github/downloads/XKaguya/AutoReconnect-Remastered/total?style=for-the-badge&logo=github)
-
 #
-AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. This plugin allows players who were accidentally disconnected from the server to spawn as the same character they were before being disconnected.
+
+[![Version](https://img.shields.io/github/v/release/XKaguya/AutoReconnect-Remastered?sort=semver&style=flat-square&color=8DBBE9&label=Version)]()
+[![GitHub Issues](https://img.shields.io/github/issues/XKaguya/AutoReconnect-Remastered/total?style=flat-square&label=Issues&color=d77982)](https://github.com/XKaguya/AutoReconnect-Remastered)
+![Downloads](https://img.shields.io/github/downloads/XKaguya/AutoReconnect-Remastered/total?style=flat-square&label=Downloads&color=d77982)
+
+AutoReconnect-Remastered is a plugin based on Exiled for SCP:SL. This plugin allows players who were accidentally disconnected from the server to spawn as the same character they were before being disconnected.
 
 # How to install
 
-Make sure you've installed the newest version of [Exiled](https://github.com/Exiled-Team/EXILED).
+Make sure you've installed Exiled.
 
-1. Download newest version of `AutoReconnect-Remastered.dll` from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases)
+1. Download newest version of `AutoReconnect-Remastered.dll` from [Release](https://github.com/XKaguya/AutoReconnect-Remastered/releases/latest)
 
 2. Put `AutoReconnect-Remastered.dll` file at `%AppData%\EXILED\Plugins`. (Press Win + R and input the `%AppData%\EXILED\Plugins` for directly open the Plugins folder.)
 
