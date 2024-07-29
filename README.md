@@ -95,5 +95,9 @@ disconnected_message: '{0} has been replaced by player {1}'
 disconnected_message_type: 1
 # The information used for other plugins to avoid conflicts. Set to default if you have no conflict.
 spawn_reason: RemoteAdmin
+# Whether or not to enable .rp command. This command allows player to replace a disconnected scp.
+replace_player: true
+# Whether or not to enable custom moudle support. Default is true.
+custom_module_support: true
 ```
 
