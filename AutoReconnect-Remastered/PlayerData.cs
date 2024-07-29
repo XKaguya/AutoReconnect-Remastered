@@ -52,7 +52,7 @@ namespace PlayerInfo
         
         public Type? CustomRoleType { get; set; }
 
-        public List<CustomItem> CustomItems { get; set; } = new();
+        public List<uint> CustomItems { get; set; } = new();
     }
     
     public class EffectList

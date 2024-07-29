@@ -10,6 +10,7 @@ using PlayerInfo;
 // using Exiled.Events.EventArgs.Scp173;
 using PlayerRoles;
 using Plugin;
+using UnityEngine;
 using Warhead = Exiled.API.Features.Warhead;
 
 namespace Event
@@ -84,7 +85,7 @@ namespace Event
             {
                 if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
                 {
-                    if (Features.GetPlayerBlockTime(ev.Player) == 0 && PluginBase.Instance!.Config.ReviveBlock)
+                    if ((Features.GetPlayerBlockTime(ev.Player) == 0 && PluginBase.Instance!.Config.ReviveBlock) || !PluginBase.Instance!.Config.ReviveBlock)
                     {
                         PlayerApi.AddPlayer(ev.Player);
                         Log.Debug($"Player {ev.Player.Nickname} data stored.");
@@ -98,6 +99,11 @@ namespace Event
                             }
                         }
                         ev.Player.ClearInventory();
+                    }
+                    // Test
+                    else
+                    {
+                        Log.Debug($"Player {ev.Player.Nickname} have {Features.GetPlayerBlockTime(ev.Player)} sec block.");
                     }
                 }
             }
@@ -132,6 +138,7 @@ namespace Event
         {
             if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Tesla && ev.DamageHandler.Type != DamageType.Marshmallow && ev.DamageHandler.Type != DamageType.Crushed && ev.DamageHandler.Type != DamageType.Warhead && ev.Attacker.Role.Side != ev.Player.Role.Side && PluginBase.Instance!.Config.ReviveBlock)
             {
+                Log.Debug($"Player {ev.Player.Nickname} has hurt. Blocking now.");
                 Features.BlockRevive(ev.Player);
             }
         }
@@ -142,6 +149,7 @@ namespace Event
             {
                 if (AcceptPlayers.Contains(ev.Target.UserId))
                 {
+                    Log.Debug($"Player {ev.Player.Nickname} Blocking now.");
                     Features.BlockRevive(ev.Target);
                 }
             }

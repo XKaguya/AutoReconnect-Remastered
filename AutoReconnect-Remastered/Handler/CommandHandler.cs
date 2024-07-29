@@ -1,6 +1,7 @@
 #pragma warning disable CS1591
 
 using System;
+using System.Text;
 using API;
 using CommandSystem;
 using Event;
@@ -75,6 +76,27 @@ namespace Commands
                 throw;
             }
         
+            return true;
+        }
+    }
+    
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class TestCommand : ICommand
+    {
+        public string Command { get; } = "test";
+        public string[] Aliases { get; } = { "test" };
+        public string Description { get; } = "Test";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender? sender, out string response)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var player in EventHandlers.AcceptPlayers)
+            {
+                sb.AppendLine(player);
+            }
+            
+            response = sb.ToString();
+            
             return true;
         }
     }

@@ -71,8 +71,7 @@ namespace API
 
             PlayerApi.ResurrectPlayer(selectedPlayer, playerData);
 
-            var message = string.Format(PluginBase.Instance!.Config.DisconnectedMessage, playerData.Class,
-                player.Nickname);
+            var message = string.Format(PluginBase.Instance!.Config.DisconnectedMessage, playerData.Class, player.Nickname);
 
             if (PluginBase.Instance.Config.DisconnectedMessageType == 1)
             {
@@ -165,16 +164,14 @@ namespace API
             {
                 try
                 {
-                    if (PlayerApi.AllPlayers != null)
+                    foreach (Player player in Player.List)
                     {
-                        foreach (Player player in PlayerApi.AllPlayers)
+                        if (EventHandlers.AcceptPlayers.Contains(player.UserId))
                         {
-                            if (EventHandlers.AcceptPlayers.Contains(player.UserId))
+                            if (GetPlayerBlockTime(player) != 0)
                             {
-                                if (GetPlayerBlockTime(player) != 0)
-                                {
-                                    DecreaseBlockTime(player);
-                                }
+                                Log.Debug($"Player {player.Nickname} with block time: {GetPlayerBlockTime(player)}");
+                                DecreaseBlockTime(player);
                             }
                         }
                     }

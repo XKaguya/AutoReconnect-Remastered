@@ -20,8 +20,7 @@ namespace API
 
             foreach (StatusEffectBase effectBase in player.ActiveEffects)
             {
-                playerData.Effects.Add(new EffectList(effectBase.GetEffectType(), effectBase.Intensity,
-                    effectBase.Duration));
+                playerData.Effects.Add(new EffectList(effectBase.GetEffectType(), effectBase.Intensity, effectBase.Duration));
             }
         }
 

@@ -19,7 +19,6 @@ namespace API
 {
     public class PlayerApi
     {
-        public static List<Player>? AllPlayers = new();
         public static Dictionary<string, PlayerData> DisconnectedPlayers = new();
 
         public static void AddPlayer(Player player)
@@ -123,9 +122,10 @@ namespace API
             {
                 try
                 {
-                    if (CustomItem.TryGet(item, out CustomItem customItem) && PluginBase.Instance.Config.CustomModuleSupport)
+                    if (PluginBase.Instance.Config.CustomModuleSupport && CustomItem.TryGet(item, out CustomItem customItem))
                     {
-                        PlayerData.CustomItems.Add(customItem);
+                        Log.Debug($"CustomItem {customItem.Name} added.");
+                        PlayerData.CustomItems.Add(customItem.Id);
                     }
                     else
                     {
@@ -141,8 +141,8 @@ namespace API
 
         public static void GetAcceptPlayers()
         {
-            var AllPlayers = Player.List.ToList();
-            foreach (var player in AllPlayers)
+            var players = Player.List.ToList();
+            foreach (var player in players)
             {
                 if (!player.DoNotTrack)
                 {
@@ -203,7 +203,7 @@ namespace API
         private static void RestoreInventory(Player player)
         {
             PlayerData? PlayerData = GetPlayerData(player);
-            if (PlayerData == null || PlayerData.Inventory.Count == 0)
+            if (PlayerData == null || PlayerData.Inventory.Count == 0 && PlayerData.CustomItems.Count == 0)
             {
                 return;
             }
@@ -213,12 +213,14 @@ namespace API
                 item.Give(player);
             }
 
-            foreach (CustomItem item in PlayerData.CustomItems)
+            foreach (uint customItem in PlayerData.CustomItems)
             {
-                item.Give(player);
+                Log.Debug($"Trying to give player custom item id: {customItem}");
+                CustomItem.TryGive(player, customItem);
             }
 
             PlayerData.Inventory.Clear();
+            PlayerData.CustomItems.Clear();
         }
         
         public static bool IsPlayerAlive(Player player)
