@@ -53,7 +53,7 @@ See:
 # Whether or not this plugin is enabled.
 is_enabled: true
 # Whether or not to display debug messages in the server console.
-debug: true
+debug: false
 # How long will the server hold the player's data. Set to 0 to disable time limit.
 retention_time: 0
 # Whether or not to respawn player. Set to false and it WILL NOT respawn player.
