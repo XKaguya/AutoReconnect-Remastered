@@ -2,6 +2,8 @@
   <img src="https://github.com/XKaguya/AutoReconnect-Remastered/blob/main/AutoReconnect-Remastered.png">
 </div>
 
+![Downloads](https://img.shields.io/github/downloads/XKaguya/AutoReconnect-Remastered/total?style=for-the-badge&logo=github)
+
 #
 AutoReconnect-Remastered is a plugin based on [Exiled](https://github.com/Exiled-Team/EXILED) for SCP:SL. This plugin allows players who were accidentally disconnected from the server to spawn as the same character they were before being disconnected.
 
