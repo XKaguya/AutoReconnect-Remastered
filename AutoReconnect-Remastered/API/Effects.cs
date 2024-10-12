@@ -32,9 +32,10 @@ namespace API
                 return;
             }
 
-            foreach (var effectType in playerData.Effects)
+            foreach (EffectList effect in playerData.Effects)
             {
-                player.EnableEffect(effectType.EffectType, effectType.Intensity, effectType.Duration);
+                player.EnableEffect(effect.EffectType, effect.Intensity, effect.Duration);
+                Log.Debug($"Recovered {effect.EffectType} {effect.Duration} {effect.Intensity}.");
             }
 
             playerData.Effects.Clear();

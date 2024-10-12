@@ -21,31 +21,40 @@ namespace API
     {
         public static Dictionary<string, PlayerData> DisconnectedPlayers = new();
 
-        public static void AddPlayer(Player player)
+        public static void AddPlayer(Player? player)
         {
-            if (player == null && !player.IsAlive) return;
-
-            PlayerData PlayerHandler = new PlayerData(player)
+            if (player == null)
             {
+                return;
+            }
+
+            PlayerData playerHandler = new PlayerData(player)
+            {
+                ArtificialHealth = player.ArtificialHealth,
                 Ammo = new Dictionary<ItemType, ushort>(),
                 Class = player.Role.Type,
-                MaxHealth = player.MaxHealth,
-                Health = player.Health,
-                Inventory = new HashSet<Item>(),
-                Name = player.Nickname,
-                Position = player.Position,
+                CustomInfo = player.CustomInfo,
+                CustomName = player.CustomName,
                 Effects = new(),
+                Health = player.Health,
+                HumeShield = player.HumeShield,
+                Inventory = new HashSet<Item>(),
+                IsUsingStamina = player.IsUsingStamina,
+                MaxArtificialHealth = player.MaxArtificialHealth,
+                MaxHealth = player.MaxHealth,
+                Name = player.Nickname,
                 Player = player,
-                Time = DateTime.Now,
-                Stamina = player.Stamina,
+                Position = player.Position,
                 Scale = player.Scale,
+                Stamina = player.Stamina,
+                Time = DateTime.Now,
             };
 
             if (player.Role.Type == RoleTypeId.Scp079)
             {
-                PlayerHandler.Exp = player.Role.As<Scp079Role>().Experience;
-                PlayerHandler.Level = player.Role.As<Scp079Role>().Level;
-                PlayerHandler.Energy = player.Role.As<Scp079Role>().Energy;
+                playerHandler.Exp = player.Role.As<Scp079Role>().Experience;
+                playerHandler.Level = player.Role.As<Scp079Role>().Level;
+                playerHandler.Energy = player.Role.As<Scp079Role>().Energy;
             }
 
             var customRoles = player.GetCustomRoles();
@@ -56,18 +65,18 @@ namespace API
                     if (customRoles.Contains(customRole))
                     {
                         // Only accept one custom role. Won't consider as a bug if multiple.
-                        PlayerHandler.CustomRole = customRole;
-                        PlayerHandler.CustomRoleType = customRole.GetType();
+                        playerHandler.CustomRole = customRole;
+                        playerHandler.CustomRoleType = customRole.GetType();
                         break;
                     }
                 }
             }
             else
             {
-                PlayerHandler.CustomRole = null;
+                playerHandler.CustomRole = null;
             }
 
-            DisconnectedPlayers.Add(player.UserId, PlayerHandler);
+            DisconnectedPlayers.Add(player.UserId, playerHandler);
 
             CallSto(player, PluginBase.Instance.Config.RecoveryInventory, PluginBase.Instance.Config.RecoveryAmmo, PluginBase.Instance.Config.RecoveryEffect);
         }
@@ -112,8 +121,8 @@ namespace API
 
         private static void CloneInventory(Player player)
         {
-            PlayerData? PlayerData = GetPlayerData(player);
-            if (PlayerData == null)
+            PlayerData? playerData = GetPlayerData(player);
+            if (playerData == null)
             {
                 return;
             }
@@ -125,11 +134,11 @@ namespace API
                     if (PluginBase.Instance.Config.CustomModuleSupport && CustomItem.TryGet(item, out CustomItem customItem))
                     {
                         Log.Debug($"CustomItem {customItem.Name} added.");
-                        PlayerData.CustomItems.Add(customItem.Id);
+                        playerData.CustomItems.Add(customItem.Id);
                     }
                     else
                     {
-                        PlayerData.Inventory.Add(item.Clone());
+                        playerData.Inventory.Add(item.Clone());
                     }
                 }
                 catch (Exception e)
@@ -156,48 +165,82 @@ namespace API
             }
         }
 
-        public static PlayerData? GetPlayerData(Player player) => DisconnectedPlayers.ContainsKey(player.UserId)
-            ? DisconnectedPlayers[player.UserId]
-            : null;
-
-        public static bool ResurrectPlayer(Player player, PlayerData playerData)
+        public static PlayerData? GetPlayerData(Player player)
         {
-            if (player == null && playerData == null) return false;
-        
+            return DisconnectedPlayers.TryGetValue(player.UserId, out var playerData) ? playerData : null;
+        }
+
+        public static bool ResurrectPlayer(Player? player, PlayerData? playerData)
+        {
+            if (player == null || playerData == null)
+            {
+                return false;
+            }
+
             player.Role.Set(playerData.Class, (SpawnReason)PluginBase.Instance.Config.SpawnReason, RoleSpawnFlags.None);
 
-            if (playerData.CustomRole == null)
-            {
-                player.Role.Set(playerData.Class, (SpawnReason)PluginBase.Instance.Config.SpawnReason, RoleSpawnFlags.None);
-            }
-            else if (playerData.CustomRole != null && playerData.CustomRoleType != null && PluginBase.Instance.Config.CustomModuleSupport)
+            if (playerData.CustomRoleType != null && PluginBase.Instance.Config.CustomModuleSupport)
             {
                 CustomRole.Get(playerData.CustomRoleType)?.AddRole(player);
             }
             
+            if (playerData.ArtificialHealth.HasValue)
+            {
+                player.ArtificialHealth = playerData.ArtificialHealth.Value;
+            }
+            
+            if (playerData.MaxArtificialHealth.HasValue)
+            {
+                player.MaxArtificialHealth = playerData.MaxArtificialHealth.Value;
+            }
+
             player.Position = playerData.Position;
             player.MaxHealth = playerData.MaxHealth;
             player.Health = playerData.Health;
             player.Scale = playerData.Scale;
             player.Stamina = playerData.Stamina;
+            player.IsUsingStamina = playerData.IsUsingStamina;
 
-            CallRec(player, PluginBase.Instance.Config.RecoveryInventory, PluginBase.Instance.Config.RecoveryAmmo, PluginBase.Instance.Config.RecoveryEffect);
+            if (playerData.HumeShield.HasValue)
+            {
+                player.HumeShield = playerData.HumeShield.Value;
+            }
+            
+            if (playerData.CustomInfo != null)
+            {
+                player.CustomInfo = playerData.CustomInfo;
+            }
+            
+            if (playerData.CustomName != null)
+            {
+                player.CustomName = playerData.CustomName;
+            }
+
+            CallRec(
+                player, 
+                PluginBase.Instance.Config.RecoveryInventory, 
+                PluginBase.Instance.Config.RecoveryAmmo, 
+                PluginBase.Instance.Config.RecoveryEffect
+            );
 
             if (playerData.Class == RoleTypeId.Scp079)
             {
-                player.Role.As<Scp079Role>().Experience = playerData.Exp;
-                player.Role.As<Scp079Role>().Energy = playerData.Energy;
-                player.Role.As<Scp079Role>().Level = playerData.Level;
+                var scp079Role = player.Role.As<Scp079Role>();
+                scp079Role.Experience = playerData.Exp;
+                scp079Role.Energy = playerData.Energy;
+                scp079Role.Level = playerData.Level;
             }
 
             DisconnectedPlayers?.Remove(player.UserId);
             return true;
         }
 
-        public static void RemovePlayerData(Player player)
+        public static void RemovePlayerData(Player? player)
         {
-            if (player == null && !DisconnectedPlayers.ContainsKey(player.UserId)) return;
-            DisconnectedPlayers?.Remove(player.UserId);
+            if (player != null && DisconnectedPlayers.ContainsKey(player.UserId))
+            {
+                DisconnectedPlayers.Remove(player.UserId);
+            }
         }
 
         private static void RestoreInventory(Player player)
@@ -226,11 +269,6 @@ namespace API
         public static bool IsPlayerAlive(Player player)
         {
             return player.Role.IsAlive;
-        }
-
-        public static bool IsPlayerDead(Player player)
-        {
-            return !player.Role.IsAlive;
         }
     }
 }

@@ -10,7 +10,6 @@ using PlayerInfo;
 // using Exiled.Events.EventArgs.Scp173;
 using PlayerRoles;
 using Plugin;
-using UnityEngine;
 using Warhead = Exiled.API.Features.Warhead;
 
 namespace Event
@@ -66,7 +65,7 @@ namespace Event
             Features.ClearBlockTime();
         }
 
-        private void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = PlayerApi.DisconnectedPlayers.ContainsKey(ev.Player.UserId) ? false : true;
+        private void OnSpawningRagdolls(SpawningRagdollEventArgs ev) => ev.IsAllowed = !PlayerApi.DisconnectedPlayers.ContainsKey(ev.Player.UserId);
 
         private void OnRoundstarted()
         {
@@ -81,30 +80,24 @@ namespace Event
 
         private void OnLeft(LeftEventArgs ev)
         { 
-            if (AcceptPlayers.Contains(ev.Player.UserId))
+            if (AcceptPlayers.Contains(ev.Player.UserId) && ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
             {
-                if (ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None)
+                bool hasBlockTime = Features.GetPlayerBlockTime(ev.Player) == 0 && PluginBase.Instance!.Config.ReviveBlock;
+                if (hasBlockTime || !PluginBase.Instance!.Config.ReviveBlock)
                 {
-                    if ((Features.GetPlayerBlockTime(ev.Player) == 0 && PluginBase.Instance!.Config.ReviveBlock) || !PluginBase.Instance!.Config.ReviveBlock)
-                    {
-                        PlayerApi.AddPlayer(ev.Player);
-                        Log.Debug($"Player {ev.Player.Nickname} data stored.");
+                    PlayerApi.AddPlayer(ev.Player);
+                    Log.Debug($"Player {ev.Player.Nickname} data stored.");
 
-                        if (PluginBase.Instance.Config.RandomSpec)
-                        {
-                            if (ev.Player.Role.Team == Team.SCPs)
-                            {
-                                Features.RandomSpec(ev.Player);
-                                Log.Debug("Random Spectator method executed.");
-                            }
-                        }
-                        ev.Player.ClearInventory();
-                    }
-                    // Test
-                    else
+                    if (PluginBase.Instance.Config.RandomSpec && ev.Player.Role.Team == Team.SCPs)
                     {
-                        Log.Debug($"Player {ev.Player.Nickname} have {Features.GetPlayerBlockTime(ev.Player)} sec block.");
+                        Features.RandomSpec(ev.Player);
+                        Log.Debug("Random Spectator method executed.");
                     }
+                    ev.Player.ClearInventory();
+                }
+                else
+                {
+                    Log.Debug($"Player {ev.Player.Nickname} have {Features.GetPlayerBlockTime(ev.Player)} sec block.");
                 }
             }
         }
@@ -123,14 +116,20 @@ namespace Event
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Decontamination || ev.DamageHandler.Type == DamageType.Custom || ev.DamageHandler.Type == DamageType.Tesla || ev.DamageHandler.Type == DamageType.Marshmallow || ev.DamageHandler.Type == DamageType.Crushed || ev.DamageHandler.Type == DamageType.Warhead)
+            switch (ev.DamageHandler.Type)
             {
-                PlayerApi.RemovePlayerData(ev.Player);
-            }
-            else
-            {
-                if (ev.Attacker == null) return;
-                PlayerApi.RemovePlayerData(ev.Player);
+                case DamageType.Decontamination:
+                case DamageType.Custom:
+                case DamageType.Tesla:
+                case DamageType.Marshmallow:
+                case DamageType.Crushed:
+                case DamageType.Warhead:
+                    PlayerApi.RemovePlayerData(ev.Player);
+                    break;
+                default:
+                    if (ev.Attacker == null) return;
+                    PlayerApi.RemovePlayerData(ev.Player);
+                    break;
             }
         }
 
@@ -172,7 +171,7 @@ namespace Event
         {
             PlayerData? playerData = PlayerApi.GetPlayerData(ev.Player);
             if (playerData == null) return;
-    
+
             PlayerApi.GetAcceptPlayers();
 
             if (PluginBase.Instance!.Config.RespawnEnabled)
@@ -182,7 +181,7 @@ namespace Event
                     PlayerApi.RemovePlayerData(ev.Player);
                     return;
                 }
-
+                
                 if (Warhead.IsDetonated && ev.Player.Zone == ZoneType.Surface)
                 {
                     if (PlayerApi.ResurrectPlayer(ev.Player, playerData))
@@ -197,7 +196,7 @@ namespace Event
                         ev.Player.Broadcast(5, PluginBase.Instance!.Config.ReconnectText, Broadcast.BroadcastFlags.Normal, true);
                     }
                 }
-
+                
                 PlayerApi.DisconnectedPlayers?.Remove(ev.Player.UserId);
             }
         }

@@ -132,7 +132,7 @@ namespace API
                 var players = Player.List;
 
                 var alivePlayers = players.Where(PlayerApi.IsPlayerAlive);
-                var deadPlayers = players.Where(PlayerApi.IsPlayerDead);
+                var deadPlayers = players.Where(player1 => player1.IsDead);
 
                 foreach (var alivePlayer in alivePlayers)
                 {
