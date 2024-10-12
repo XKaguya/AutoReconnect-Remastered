@@ -6,9 +6,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using PlayerRoles;
 using System.Collections.Generic;
-using CustomPlayerEffects.Danger;
 using Exiled.CustomRoles.API.Features;
-using PlayerStatsSystem;
 using UnityEngine;
 
 namespace PlayerInfo
